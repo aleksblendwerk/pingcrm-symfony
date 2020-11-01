@@ -1,0 +1,19 @@
+parameters:
+    level: max
+
+    paths:
+        - src
+        - tests
+
+    symfony:
+        container_xml_path: '%rootDir%/../../../var/cache/dev/App_KernelDevDebugContainer.xml'
+
+    doctrine:
+        objectManagerLoader: tests/object-manager-stub.php
+
+    bootstrapFiles:
+        # required to check files in tests/
+        - bin/.phpunit/phpunit/vendor/autoload.php
+
+    excludes_analyse:
+        - tests/bootstrap.php
