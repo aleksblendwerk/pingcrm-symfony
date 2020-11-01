@@ -7,6 +7,7 @@ namespace App\DataFixtures;
 use App\Entity\Account;
 use App\Factory\ContactFactory;
 use App\Factory\OrganizationFactory;
+use App\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -18,6 +19,16 @@ class AppFixtures extends Fixture
         $account->setName('Acme Corporation');
 
         $manager->persist($account);
+
+        UserFactory::new()->create([
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'email' => 'johndoe@example.com',
+            'roles' => ['ROLE_OWNER'],
+            'account' => $account
+        ]);
+
+        UserFactory::new()->createMany(5, ['account' => $account]);
 
         OrganizationFactory::new()->createMany(100, ['account' => $account]);
 

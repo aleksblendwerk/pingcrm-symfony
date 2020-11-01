@@ -44,10 +44,18 @@ class Account
      */
     private Collection $contacts;
 
+    /**
+     * @var Collection<int, User>
+     *
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="account")
+     */
+    private Collection $users;
+
     public function __construct()
     {
         $this->organizations = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,25 +113,60 @@ class Account
         return $this->contacts;
     }
 
-    public function addContact(Contact $contact): self
+    public function addContact(Contact $contact): void
     {
-        if (!$this->contacts->contains($contact)) {
-            $this->contacts[] = $contact;
-            $contact->setAccount($this);
+        if ($this->contacts->contains($contact)) {
+            return;
         }
 
-        return $this;
+        $this->contacts[] = $contact;
+        $contact->setAccount($this);
     }
 
-    public function removeContact(Contact $contact): self
+    public function removeContact(Contact $contact): void
     {
-        if ($this->contacts->removeElement($contact)) {
-            // set the owning side to null (unless already changed)
-            if ($contact->getAccount() === $this) {
-                $contact->setAccount(null);
-            }
+        if (!$this->contacts->removeElement($contact)) {
+            return;
         }
 
-        return $this;
+        // set the owning side to null (unless already changed)
+        if ($contact->getAccount() !== $this) {
+            return;
+        }
+
+        $contact->setAccount(null);
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): void
+    {
+        if ($this->users->contains($user)) {
+            return;
+        }
+
+        $this->users[] = $user;
+
+        $user->setAccount($this);
+    }
+
+    public function removeUser(User $user): void
+    {
+        if (!$this->users->removeElement($user)) {
+            return;
+        }
+
+        // set the owning side to null (unless already changed)
+        if ($user->getAccount() !== $this) {
+            return;
+        }
+
+        $user->setAccount(null);
     }
 }
