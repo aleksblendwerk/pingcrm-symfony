@@ -12,6 +12,7 @@
         "doctrine/orm": "^2.7",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
+        "stof/doctrine-extensions-bundle": "^1.5",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "5.1.*",
         "symfony/console": "5.1.*",
