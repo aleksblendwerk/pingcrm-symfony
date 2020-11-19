@@ -6,14 +6,24 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="users")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+ * @UniqueEntity("email")
  */
 class User implements UserInterface
 {
+    use TimestampableEntity;
+    use SoftDeleteableEntity;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -22,26 +32,40 @@ class User implements UserInterface
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=50, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=50)
+     * @Assert\Email()
      */
     private string $email;
 
     /**
      * @ORM\Column(type="string", length=25)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=25)
      */
     private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=25)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=25)
      */
     private string $lastName;
 
     /**
      * The hashed password
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(normalizer="trim")
      */
-    private string $password;
+    private ?string $password;
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @Assert\NotNull()
+     */
+    private bool $owner = false;
 
     /**
      * @var array<int, string>
@@ -53,6 +77,8 @@ class User implements UserInterface
     /**
      * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull()
+     * @Assert\Type("App\Entity\Account")
      */
     private Account $account;
 
@@ -66,8 +92,14 @@ class User implements UserInterface
         return $this->email ?? null;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail(?string $email): void
     {
+        if ($email === null) {
+            unset($this->email);
+
+            return;
+        }
+
         $this->email = $email;
     }
 
@@ -76,8 +108,14 @@ class User implements UserInterface
         return $this->firstName ?? null;
     }
 
-    public function setFirstName(string $firstName): void
+    public function setFirstName(?string $firstName): void
     {
+        if ($firstName === null) {
+            unset($this->firstName);
+
+            return;
+        }
+
         $this->firstName = $firstName;
     }
 
@@ -86,9 +124,20 @@ class User implements UserInterface
         return $this->lastName ?? null;
     }
 
-    public function setLastName(string $lastName): void
+    public function setLastName(?string $lastName): void
     {
+        if ($lastName === null) {
+            unset($this->lastName);
+
+            return;
+        }
+
         $this->lastName = $lastName;
+    }
+
+    public function getName(): string
+    {
+        return sprintf('%s %s', $this->getFirstName(), $this->getLastName());
     }
 
     /**
@@ -114,6 +163,16 @@ class User implements UserInterface
         $this->roles = $roles;
     }
 
+    public function isOwner(): bool
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(bool $owner): void
+    {
+        $this->owner = $owner;
+    }
+
     /**
      * @see UserInterface
      */
@@ -122,8 +181,14 @@ class User implements UserInterface
         return $this->password ?? null;
     }
 
-    public function setPassword(string $password): void
+    public function setPassword(?string $password): void
     {
+        if ($password === null) {
+            unset($this->password);
+
+            return;
+        }
+
         $this->password = $password;
     }
 

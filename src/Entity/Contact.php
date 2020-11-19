@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ContactRepository::class)
@@ -30,6 +31,8 @@ class Contact
     /**
      * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="contacts")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull()
+     * @Assert\Type("App\Entity\Account")
      */
     private Account $account;
 
@@ -40,46 +43,58 @@ class Contact
 
     /**
      * @ORM\Column(type="string", length=25)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=25)
      */
     private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=25)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=25)
      */
     private string $lastName;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
+     * @Assert\Email()
      */
     private ?string $email = null;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
      */
     private ?string $phone = null;
 
     /**
      * @ORM\Column(type="string", length=150, nullable=true)
+     * @Assert\Length(max=150)
      */
     private ?string $address = null;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
      */
     private ?string $city = null;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
      */
     private ?string $region = null;
 
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
+     * @Assert\Length(max=2)
      */
     private ?string $country = null;
 
     /**
      * @ORM\Column(type="string", length=25, nullable=true)
+     * @Assert\Length(max=25)
      */
     private ?string $postalCode = null;
 
@@ -116,22 +131,39 @@ class Contact
 
     public function getFirstName(): ?string
     {
-        return $this->firstName;
+        return $this->firstName ?? null;
     }
 
-    public function setFirstName(string $firstName): void
+    public function setFirstName(?string $firstName): void
     {
+        if ($firstName === null) {
+            unset($this->firstName);
+
+            return;
+        }
+
         $this->firstName = $firstName;
     }
 
     public function getLastName(): ?string
     {
-        return $this->lastName;
+        return $this->lastName ?? null;
     }
 
-    public function setLastName(string $lastName): void
+    public function setLastName(?string $lastName): void
     {
+        if ($lastName === null) {
+            unset($this->lastName);
+
+            return;
+        }
+
         $this->lastName = $lastName;
+    }
+
+    public function getName(): string
+    {
+        return sprintf('%s %s', $this->getFirstName(), $this->getLastName());
     }
 
     public function getEmail(): ?string

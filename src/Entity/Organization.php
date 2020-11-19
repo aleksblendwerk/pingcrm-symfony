@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=OrganizationRepository::class)
@@ -32,46 +33,58 @@ class Organization
     /**
      * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="organizations")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull()
+     * @Assert\Type("App\Entity\Account")
      */
     private Account $account;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=100)
      */
     private string $name;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
+     * @Assert\Email()
      */
     private ?string $email = null;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
      */
     private ?string $phone = null;
 
     /**
      * @ORM\Column(type="string", length=150, nullable=true)
+     * @Assert\Length(max=150)
      */
     private ?string $address = null;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
      */
     private ?string $city = null;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
      */
     private ?string $region = null;
 
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
+     * @Assert\Length(max=2)
      */
     private ?string $country = null;
 
     /**
      * @ORM\Column(type="string", length=25, nullable=true)
+     * @Assert\Length(max=25)
      */
     private ?string $postalCode = null;
 
@@ -79,6 +92,7 @@ class Organization
      * @var Collection<int, Contact>
      *
      * @ORM\OneToMany(targetEntity=Contact::class, mappedBy="organization")
+     * @ORM\OrderBy({"lastName" = "ASC", "firstName" = "ASC"})
      */
     private Collection $contacts;
 
@@ -110,11 +124,17 @@ class Organization
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->name ?? null;
     }
 
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
+        if ($name === null) {
+            unset($this->name);
+
+            return;
+        }
+
         $this->name = $name;
     }
 
