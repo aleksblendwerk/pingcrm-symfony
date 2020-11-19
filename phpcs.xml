@@ -15,7 +15,7 @@
     <file>src/</file>
     <file>tests/</file>
 
-    <!-- exclude files created by symfony! -->
+    <!-- Exclude files created by Symfony -->
     <exclude-pattern>bin/.phpunit/</exclude-pattern>
     <exclude-pattern>public/index.php</exclude-pattern>
     <exclude-pattern>src/Kernel.php</exclude-pattern>
@@ -29,7 +29,7 @@
 
     <rule ref="Generic.PHP.NoSilencedErrors">
         <properties>
-            <!-- results in a warning instead -->
+            <!-- Results in a warning instead -->
             <property name="error" value="false" />
         </properties>
     </rule>
@@ -117,7 +117,6 @@
 
     <!-- Formatting - rules for consistent code looks -->
     <rule ref="SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement"/>
-    <!-- test: SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace [1, 2, 3] hätten wir gern, was ist enableEmptyArrayCheck -->
     <rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing">
         <properties>
             <property name="linesCountBetweenMembers" value="1"/>
@@ -167,7 +166,7 @@
             <property name="linesCountBeforeControlStructure" value="1"/>
             <property name="linesCountAfterControlStructure" value="1"/>
 
-            <!-- leave 'case' & 'default' alone -->
+            <!-- Leave 'case' & 'default' alone -->
             <property name="tokensToCheck" type="array">
                 <element value="T_DO"/>
                 <element value="T_FOR"/>
@@ -295,7 +294,7 @@
                 <element value="@package"/>
                 <element value="@copyright"/>
                 <element value="@license"/>
-                <!-- element value="@throws"/ -->
+                <element value="@throws"/>
             </property>
         </properties>
     </rule>
