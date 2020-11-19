@@ -56,10 +56,10 @@ class User implements UserInterface
     /**
      * The hashed password
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string")
      * @Assert\NotBlank(normalizer="trim")
      */
-    private ?string $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="boolean")
@@ -142,8 +142,6 @@ class User implements UserInterface
 
     /**
      * @return array<int, string>
-     *
-     * @see UserInterface
      */
     public function getRoles(): array
     {
@@ -173,9 +171,6 @@ class User implements UserInterface
         $this->owner = $owner;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password ?? null;
@@ -192,17 +187,11 @@ class User implements UserInterface
         $this->password = $password;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getSalt(): ?string
     {
         return null;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here

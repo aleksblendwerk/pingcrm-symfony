@@ -10,12 +10,20 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 
 use function Symfony\Component\String\s;
 
 class UserController extends BaseController
 {
+    protected UserPasswordEncoderInterface $userPasswordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $userPasswordEncoder)
+    {
+        $this->userPasswordEncoder = $userPasswordEncoder;
+    }
+
     /**
      * @Route("/users/", name="users", methods={"GET"}, options={"expose"=true}))
      */
@@ -110,8 +118,12 @@ class UserController extends BaseController
         $user->setEmail($request->request->get('email'));
         $user->setOwner($request->request->getBoolean('owner'));
 
-        if ($request->request->has('password') && $request->request->get('password') !== '') {
-            $user->setPassword($request->request->get('password'));
+        if ($request->request->has('password')) {
+            $password = $request->request->get('password');
+
+            if ($password !== '' && $password !== null) {
+                $user->setPassword($this->userPasswordEncoder->encodePassword($user, $password));
+            }
         }
 
         // TODO: photo
