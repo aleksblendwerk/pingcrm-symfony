@@ -1,5 +1,5 @@
 logout:
     path: /logout
-    methods: GET
+    methods: POST
     options:
         expose: true
