@@ -81,6 +81,10 @@ class OrganizationController extends BaseController
             $organization->setAccount($this->getCurrentUserAccount());
 
             $errors = $this->handleFormData($request, $organization, 'Organization created.');
+
+            if (count($errors) === 0) {
+                return new RedirectResponse($this->generateUrl('organizations'));
+            }
         }
 
         return $this->renderWithInertia(
@@ -97,6 +101,10 @@ class OrganizationController extends BaseController
     {
         if ($request->getMethod() === 'PUT') {
             $errors = $this->handleFormData($request, $organization, 'Organization updated.');
+
+            if (count($errors) === 0) {
+                return new RedirectResponse($this->generateUrl('organizations_edit', ['id' => $organization->getId()]));
+            }
         }
 
         $contacts = array_map(

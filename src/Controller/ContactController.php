@@ -85,6 +85,10 @@ class ContactController extends BaseController
             $contact->setAccount($this->getCurrentUserAccount());
 
             $errors = $this->handleFormData($request, $contact, 'Contact created.');
+
+            if (count($errors) === 0) {
+                return new RedirectResponse($this->generateUrl('contacts'));
+            }
         }
 
         $organizations = array_map(
@@ -114,6 +118,10 @@ class ContactController extends BaseController
     {
         if ($request->getMethod() === 'PUT') {
             $errors = $this->handleFormData($request, $contact, 'Contact updated.');
+
+            if (count($errors) === 0) {
+                return new RedirectResponse($this->generateUrl('contacts_edit', ['id' => $contact->getId()]));
+            }
         }
 
         $organizations = array_map(

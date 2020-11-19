@@ -60,6 +60,10 @@ class UserController extends BaseController
             $user->setAccount($this->getCurrentUserAccount());
 
             $errors = $this->handleFormData($request, $user, 'User created.');
+
+            if (count($errors) === 0) {
+                return new RedirectResponse($this->generateUrl('users'));
+            }
         }
 
         return $this->renderWithInertia(
@@ -76,6 +80,10 @@ class UserController extends BaseController
     {
         if ($request->getMethod() === 'PUT') {
             $errors = $this->handleFormData($request, $user, 'User updated.');
+
+            if (count($errors) === 0) {
+                return new RedirectResponse($this->generateUrl('users_edit', ['id' => $user->getId()]));
+            }
         }
 
         return $this->renderWithInertia('Users/Edit', [
