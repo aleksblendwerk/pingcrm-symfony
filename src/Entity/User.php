@@ -10,16 +10,19 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="users")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @UniqueEntity("email")
+ * @Vich\Uploadable()
  */
-class User implements UserInterface
+class User implements UserInterface, \Serializable
 {
     use TimestampableEntity;
     use SoftDeleteableEntity;
@@ -66,6 +69,17 @@ class User implements UserInterface
      * @Assert\NotNull()
      */
     private bool $owner = false;
+
+    /**
+     * @Assert\Image(mimeTypes={"image/jpeg", "image/png"}, minWidth=1, minHeight=1)
+     * @Vich\UploadableField(mapping="user_photo", fileNameProperty="photoFilename")
+     */
+    private ?File $photoFile = null;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private ?string $photoFilename = null;
 
     /**
      * @var array<int, string>
@@ -171,6 +185,32 @@ class User implements UserInterface
         $this->owner = $owner;
     }
 
+    public function getPhotoFile(): ?File
+    {
+        return $this->photoFile;
+    }
+
+    public function setPhotoFile(?File $photoFile = null): void
+    {
+        $this->photoFile = $photoFile;
+
+        if ($photoFile === null) {
+            return;
+        }
+
+        $this->updatedAt = new \DateTime();
+    }
+
+    public function getPhotoFilename(): ?string
+    {
+        return $this->photoFilename;
+    }
+
+    public function setPhotoFilename(?string $photoFilename): void
+    {
+        $this->photoFilename = $photoFilename;
+    }
+
     public function getPassword(): ?string
     {
         return $this->password ?? null;
@@ -222,6 +262,20 @@ class User implements UserInterface
     public function getUsername(): string
     {
         return $this->getEmail() ?? 'Unknown User';
+    }
+
+    public function serialize(): string
+    {
+        return serialize([$this->getId(), $this->getEmail(), $this->getPassword()]);
+    }
+
+    /**
+     * @param string $serialized
+     */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+    public function unserialize($serialized): void
+    {
+        [$this->id, $this->email, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
 
     public function __toString(): string

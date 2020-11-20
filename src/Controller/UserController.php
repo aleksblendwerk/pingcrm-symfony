@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Util\ImageHandler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +41,9 @@ class UserController extends BaseController
                     'name' => $user->getName(),
                     'email' => $user->getEmail(),
                     'owner' => $user->isOwner(),
-                    'photo' => null, // TODO: ...
+                    'photo' => $user->getPhotoFilename() !== null
+                        ? ImageHandler::resolvePathToResizedImage('/images/' . $user->getPhotoFilename(), 40, 40)
+                        : null,
                     'deleted_at' => $user->getDeletedAt()
                 ];
             },
@@ -101,7 +104,9 @@ class UserController extends BaseController
                 'last_name' => $user->getLastName(),
                 'email' => $user->getEmail(),
                 'owner' => $user->isOwner(),
-                'photo' => null, // $user->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
+                'photo' => $user->getPhotoFilename() !== null
+                    ? ImageHandler::resolvePathToResizedImage('/images/' . $user->getPhotoFilename(), 60, 60)
+                    : null,
                 'deleted_at' => $user->getDeletedAt()
             ],
             'errors' => isset($errors) ? new \ArrayObject($errors) : new \ArrayObject()
@@ -126,7 +131,10 @@ class UserController extends BaseController
             }
         }
 
-        // TODO: photo
+        if ($request->files->has('photo')) {
+            $user->setPhotoFile($request->files->get('photo'));
+        }
+
         $violations = $this->validator->validate($user);
 
         if ($violations->count() === 0) {
@@ -143,6 +151,10 @@ class UserController extends BaseController
         /** @var ConstraintViolationInterface $violation */
         foreach ($violations as $violation) {
             $propertyName = (string) s($violation->getPropertyPath())->snake();
+
+            if ($propertyName === 'photo_filename') {
+                $propertyName = 'photo';
+            }
 
             $errors[$propertyName] = (string) $violation->getMessage();
         }

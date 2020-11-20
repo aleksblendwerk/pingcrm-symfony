@@ -13,6 +13,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
         "friendsofsymfony/jsrouting-bundle": "^2.6",
+        "gumlet/php-image-resize": "^2.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "rompetomp/inertia-bundle": "^2.0",
         "sensio/framework-extra-bundle": "^5.1",
@@ -45,6 +46,7 @@
         "symfony/yaml": "5.1.*",
         "twig/extra-bundle": "^2.12 || ^3.0",
         "twig/twig": "^2.12 || ^3.0",
+        "vich/uploader-bundle": "^1.15",
         "zenstruck/foundry": "^1.4"
     },
     "replace": {

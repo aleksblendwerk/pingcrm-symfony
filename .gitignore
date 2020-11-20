@@ -1,5 +1,6 @@
 .DS_Store
 /.idea/
+/public/images/
 
 ###> symfony/framework-bundle ###
 /.env.local
