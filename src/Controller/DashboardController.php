@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends BaseController
 {
     /**
-     * @Route("/", name="dashboard", options={"expose"=true})
+     * @Route("/", name="dashboard", methods={"GET"}, options={"expose"=true})
      */
     public function index(): Response
     {
