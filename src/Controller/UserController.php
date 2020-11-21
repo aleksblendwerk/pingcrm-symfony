@@ -162,8 +162,14 @@ class UserController extends BaseController
         foreach ($violations as $violation) {
             $propertyName = (string) s($violation->getPropertyPath())->snake();
 
-            if ($propertyName === 'photo_filename') {
-                $propertyName = 'photo';
+            if ($propertyName === 'photo_file') {
+                if (!array_key_exists('photo', $errors)) {
+                    $errors['photo'] = [];
+                }
+
+                $errors['photo'][] = (string) $violation->getMessage();
+
+                continue;
             }
 
             $errors[$propertyName] = (string) $violation->getMessage();

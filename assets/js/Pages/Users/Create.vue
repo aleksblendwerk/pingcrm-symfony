@@ -15,7 +15,7 @@
             <option :value="true">Yes</option>
             <option :value="false">No</option>
           </select-input>
-          <file-input v-model="form.photo" :error="errors.photo" class="pr-6 pb-8 w-full lg:w-1/2" type="file" accept="image/*" label="Photo" />
+          <file-input v-model="form.photo" :errors="errors.photo" class="pr-6 pb-8 w-full lg:w-1/2" type="file" accept="image/*" label="Photo" />
         </div>
         <div class="px-8 py-4 bg-gray-100 border-t border-gray-200 flex justify-end items-center">
           <loading-button :loading="sending" class="btn-indigo" type="submit">Create User</loading-button>
