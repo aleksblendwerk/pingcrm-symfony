@@ -97,18 +97,28 @@ class UserController extends BaseController
             }
         }
 
+        $userData = [
+            'id' => $user->getId(),
+            'first_name' => $user->getFirstName(),
+            'last_name' => $user->getLastName(),
+            'email' => $user->getEmail(),
+            'owner' => $user->isOwner(),
+            'photo' => $user->getPhotoFilename() !== null
+                ? ImageHandler::resolvePathToResizedImage('/images/' . $user->getPhotoFilename(), 60, 60)
+                : null,
+            'deleted_at' => $user->getDeletedAt()
+        ];
+
+        /*
+         * edge case: when editing the currently logged in user and there were errors,
+         * we need to assure we reload a valid state here, otherwise this will mess up the authentication system
+         */
+        if ($request->getMethod() === 'PUT' && $user === $this->getUser()) {
+            $this->getDoctrine()->getManager()->refresh($user);
+        }
+
         return $this->renderWithInertia('Users/Edit', [
-            'user' => [
-                'id' => $user->getId(),
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'email' => $user->getEmail(),
-                'owner' => $user->isOwner(),
-                'photo' => $user->getPhotoFilename() !== null
-                    ? ImageHandler::resolvePathToResizedImage('/images/' . $user->getPhotoFilename(), 60, 60)
-                    : null,
-                'deleted_at' => $user->getDeletedAt()
-            ],
+            'user' => $userData,
             'errors' => isset($errors) ? new \ArrayObject($errors) : new \ArrayObject()
         ]);
     }
