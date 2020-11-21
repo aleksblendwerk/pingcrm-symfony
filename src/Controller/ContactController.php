@@ -75,7 +75,7 @@ class ContactController extends BaseController
 
     /**
      * @Route("/contacts/create", name="contacts_create", methods={"GET"}, options={"expose"=true}))
-     * @Route("/contacts/store", name="contacts_store", methods={"POST"}, options={"expose"=true}))
+     * @Route("/contacts/create", name="contacts_store", methods={"POST"}, options={"expose"=true}))
      */
     public function create(Request $request, OrganizationRepository $organizationRepository): Response
     {
@@ -112,7 +112,7 @@ class ContactController extends BaseController
 
     /**
      * @Route("/contacts/{id}/edit", name="contacts_edit", methods={"GET"}, options={"expose"=true}))
-     * @Route("/contacts/{id}/update", name="contacts_update", methods={"PUT"}, options={"expose"=true}))
+     * @Route("/contacts/{id}/edit", name="contacts_update", methods={"PUT"}, options={"expose"=true}))
      */
     public function edit(Request $request, Contact $contact, OrganizationRepository $organizationRepository): Response
     {

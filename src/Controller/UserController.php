@@ -61,7 +61,7 @@ class UserController extends BaseController
 
     /**
      * @Route("/users/create", name="users_create", methods={"GET"}, options={"expose"=true}))
-     * @Route("/users/store", name="users_store", methods={"POST"}, options={"expose"=true}))
+     * @Route("/users/create", name="users_store", methods={"POST"}, options={"expose"=true}))
      */
     public function create(Request $request): Response
     {
@@ -85,7 +85,7 @@ class UserController extends BaseController
 
     /**
      * @Route("/users/{id}/edit", name="users_edit", methods={"GET"}, options={"expose"=true}))
-     * @Route("/users/{id}/update", name="users_update", methods={"PUT"}, options={"expose"=true}))
+     * @Route("/users/{id}/edit", name="users_update", methods={"PUT"}, options={"expose"=true}))
      */
     public function edit(Request $request, User $user): Response
     {

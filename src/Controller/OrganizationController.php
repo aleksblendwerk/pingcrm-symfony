@@ -71,7 +71,7 @@ class OrganizationController extends BaseController
 
     /**
      * @Route("/organizations/create", name="organizations_create", methods={"GET"}, options={"expose"=true}))
-     * @Route("/organizations/store", name="organizations_store", methods={"POST"}, options={"expose"=true}))
+     * @Route("/organizations/create", name="organizations_store", methods={"POST"}, options={"expose"=true}))
      */
     public function create(Request $request): Response
     {
@@ -95,7 +95,7 @@ class OrganizationController extends BaseController
 
     /**
      * @Route("/organizations/{id}/edit", name="organizations_edit", methods={"GET"}, options={"expose"=true}))
-     * @Route("/organizations/{id}/update", name="organizations_update", methods={"PUT"}, options={"expose"=true}))
+     * @Route("/organizations/{id}/edit", name="organizations_update", methods={"PUT"}, options={"expose"=true}))
      */
     public function edit(Request $request, Organization $organization): Response
     {
