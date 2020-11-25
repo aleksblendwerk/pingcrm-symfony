@@ -19,7 +19,6 @@
     <exclude-pattern>bin/.phpunit/</exclude-pattern>
     <exclude-pattern>public/index.php</exclude-pattern>
     <exclude-pattern>src/Kernel.php</exclude-pattern>
-    <exclude-pattern>tests/bootstrap.php</exclude-pattern>
 
     <!-- PSR12 -->
     <rule ref="PSR12"/>

@@ -14,6 +14,3 @@ parameters:
     bootstrapFiles:
         # required to check files in tests/
         - bin/.phpunit/phpunit/vendor/autoload.php
-
-    excludes_analyse:
-        - tests/bootstrap.php

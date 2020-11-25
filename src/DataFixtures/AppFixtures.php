@@ -24,7 +24,7 @@ class AppFixtures extends Fixture
             'firstName' => 'John',
             'lastName' => 'Doe',
             'email' => 'johndoe@example.com',
-            'roles' => ['ROLE_OWNER'],
+            'owner' => true,
             'account' => $account
         ]);
 

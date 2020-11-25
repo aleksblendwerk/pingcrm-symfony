@@ -8,9 +8,16 @@ use App\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Zenstruck\Foundry\ModelFactory;
 
-final class UserFactory extends ModelFactory
+class UserFactory extends ModelFactory
 {
     protected UserPasswordEncoderInterface $userPasswordEncoder;
+
+    /**
+     * @var array<string, string>
+     */
+    protected array $knownPasswordHashes = [
+        'secret' => '$argon2id$v=19$m=65536,t=4,p=1$ux1PEx9u0ynZ5KJG7k4xwA$0yBw3YwKSkI9nxr/djTS9FN86q1vveCM+vNUJBS8nFw'
+    ];
 
     public function __construct(UserPasswordEncoderInterface $userPasswordEncoder)
     {
@@ -28,10 +35,8 @@ final class UserFactory extends ModelFactory
             'firstName' => self::faker()->firstName,
             'lastName' => self::faker()->lastName,
             'email' => self::faker()->unique()->safeEmail,
-            'password' => 'secret',
-            // 'remember_token' => Str::random(10)
-            // 'owner' => false
-            'roles' => []
+            'owner' => false,
+            'password' => 'secret'
         ];
     }
 
@@ -40,9 +45,14 @@ final class UserFactory extends ModelFactory
      */
     protected function initialize(): self
     {
-        // @phpstan-ignore-next-line (seems to be related to https://github.com/phpstan/phpstan/issues/3523)
         return $this->afterInstantiate(function (User $user): void {
             if ($user->getPassword() === null) {
+                return;
+            }
+
+            if (array_key_exists($user->getPassword(), $this->knownPasswordHashes)) {
+                $user->setPassword($this->knownPasswordHashes[$user->getPassword()]);
+
                 return;
             }
 

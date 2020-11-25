@@ -7,7 +7,7 @@ namespace App\Factory;
 use App\Entity\Organization;
 use Zenstruck\Foundry\ModelFactory;
 
-final class OrganizationFactory extends ModelFactory
+class OrganizationFactory extends ModelFactory
 {
     /**
      * @return array<string, mixed>
