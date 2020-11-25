@@ -1,6 +1,14 @@
 {
+    "name": "blendwerk/pingcrm-symfony",
     "type": "project",
-    "license": "proprietary",
+    "description": "A demo application to illustrate how Inertia.js works, ported to Symfony from Laravel",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aleks Seltenreich",
+            "email": "aleks@blendwerk.net"
+        }
+    ],
     "require": {
         "php": ">=7.4",
         "ext-ctype": "*",
@@ -87,6 +95,10 @@
         "sort-packages": true
     },
     "extra": {
+        "composer-normalize": {
+            "indent-size": 4,
+            "indent-style": "space"
+        },
         "symfony": {
             "allow-contrib": true,
             "require": "5.1.*"
@@ -113,6 +125,17 @@
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
+        "build-database": [
+            "symfony console doctrine:database:create --if-not-exists",
+            "symfony console doctrine:schema:drop --ansi --force --full-database --no-interaction",
+            "symfony console doctrine:schema:update --ansi --force --no-interaction",
+            "symfony console doctrine:fixtures:load --ansi --no-interaction"
+        ],
+        "build-test-database": [
+            "symfony console doctrine:database:create --env=test --if-not-exists",
+            "symfony console doctrine:schema:drop --ansi --env=test --force --full-database --no-interaction",
+            "symfony console doctrine:schema:update --ansi --env=test --force --no-interaction"
+        ],
         "lint": "vendor/bin/parallel-lint --colors --exclude bin/.phpunit --exclude var --exclude vendor .",
         "phpcbf": "vendor/bin/phpcbf",
         "phpcs": "vendor/bin/phpcs --colors",
@@ -120,7 +143,7 @@
         "phpunit": "bin/phpunit --colors=always",
         "phpunit-install": "bin/phpunit install",
         "qa": [
-            "@composer normalize --ansi --dry-run --indent-size 4 --indent-style space",
+            "@composer normalize --ansi --dry-run",
             "symfony console lint:twig templates --ansi",
             "symfony console lint:yaml config --ansi",
             "symfony console lint:container --ansi",
@@ -131,6 +154,7 @@
             "@phpstan"
         ],
         "test": [
+            "@build-test-database",
             "@phpunit"
         ]
     }
