@@ -1,0 +1,56 @@
+name: CI
+
+on: [push, pull_request]
+
+env:
+    fail-fast: true
+    FORCE_COLOR: "true"
+
+jobs:
+    all_in_one:
+        name: Build, QA and Tests
+        runs-on: ubuntu-latest
+
+        services:
+            mysql:
+                image: mysql:5.7
+                env:
+                    MYSQL_DATABASE: pingcrm_symfony_test
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '7.4'
+                    coverage: none
+                    tools: symfony
+
+            -   name: Setup Node.js
+                uses: actions/setup-node@v1
+                with:
+                    node-version: '12'
+
+            -   name: Install dependencies
+                run: |
+                    composer install --ansi --no-progress
+                    composer phpunit-install --ansi -- --no-progress
+                    yarn install --no-progress
+
+            -   name: Build assets
+                run: yarn encore production
+
+            -   name: QA
+                run: |
+                    sed -i "s#phpstan analyse#phpstan analyse --no-progress#" composer.json
+                    composer qa --ansi
+
+            -   name: Tests
+                run: |
+                    composer test --ansi
