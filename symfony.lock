@@ -8,6 +8,9 @@
     "dealerdirect/phpcodesniffer-composer-installer": {
         "version": "v0.7.0"
     },
+    "dneustadt/csrf-cookie-bundle": {
+        "version": "1.0.1"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {

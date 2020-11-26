@@ -19,5 +19,6 @@ return [
     Rompetomp\InertiaBundle\RompetompInertiaBundle::class => ['all' => true],
     FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
     SymfonyBundles\JsonRequestBundle\SymfonyBundlesJsonRequestBundle::class => ['all' => true],
-    Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true]
+    Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
+    Dneustadt\CsrfCookieBundle\DneustadtCsrfCookieBundle::class => ['dev' => true, 'prod' => true],
 ];
