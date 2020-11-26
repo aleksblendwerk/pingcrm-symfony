@@ -3,6 +3,7 @@ name: CI
 on: [push, pull_request]
 
 env:
+    APP_ENV: dev
     fail-fast: true
     FORCE_COLOR: "true"
 
