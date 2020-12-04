@@ -5,10 +5,7 @@ A demo application to illustrate how [Inertia.js](https://inertiajs.com/) works,
 
 ![Screenshot](screenshot.png)
 
-## About PHP 8.0
-
-The current version on `main` most likely won't install properly on PHP 8.0 as some dependencies are not ready yet.
-Please use PHP 7.4 in the meantime, I will try and add support for 8.0 as soon as possible.
+Tested on both PHP 7.4 and 8.0.
 
 ## Installation
 
