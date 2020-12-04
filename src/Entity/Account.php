@@ -8,15 +8,16 @@ use App\Repository\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
  * @ORM\Entity(repositoryClass=AccountRepository::class)
  * @ORM\Table(name="accounts")
  */
-class Account
+class Account implements TimestampableInterface
 {
-    use TimestampableEntity;
+    use TimestampableTrait;
 
     /**
      * @ORM\Id

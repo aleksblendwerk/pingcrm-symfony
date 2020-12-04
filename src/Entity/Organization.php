@@ -8,20 +8,20 @@ use App\Repository\OrganizationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=OrganizationRepository::class)
  * @ORM\Table(name="organizations")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
-class Organization
+class Organization implements SoftDeletableInterface, TimestampableInterface
 {
-    use TimestampableEntity;
-    use SoftDeleteableEntity;
+    use SoftDeletableTrait;
+    use TimestampableTrait;
 
     /**
      * @ORM\Id

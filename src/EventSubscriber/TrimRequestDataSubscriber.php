@@ -27,11 +27,11 @@ class TrimRequestDataSubscriber implements EventSubscriberInterface
     ];
 
     /**
-     * @return array<string, string>
+     * @return array<string, array<int, int|string>>
      */
     public static function getSubscribedEvents(): array
     {
-        return [RequestEvent::class => 'trimRequestData'];
+        return [RequestEvent::class => ['trimRequestData', 1]];
     }
 
     public function trimRequestData(RequestEvent $event): void
@@ -80,6 +80,7 @@ class TrimRequestDataSubscriber implements EventSubscriberInterface
 
         $cleanedArray = array_combine($keys, $cleanedValues);
 
+        // @phpstan-ignore-next-line
         if ($cleanedArray === false) {
             throw new \RuntimeException('Number of keys and values after cleanArray does not match.');
         }

@@ -66,7 +66,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         if ($trashed === null) {
-            $this->getEntityManager()->getFilters()->enable('softdeleteable');
+            $qb->andWhere($qb->expr()->isNull('user.deletedAt'));
         } elseif ($trashed === 'only') {
             $qb->andWhere($qb->expr()->isNotNull('user.deletedAt'));
         }

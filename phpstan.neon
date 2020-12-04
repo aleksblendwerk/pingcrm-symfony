@@ -11,6 +11,4 @@ parameters:
     doctrine:
         objectManagerLoader: tests/object-manager-stub.php
 
-    bootstrapFiles:
-        # required to check files in tests/
-        - bin/.phpunit/phpunit/vendor/autoload.php
+    reportUnmatchedIgnoredErrors: false

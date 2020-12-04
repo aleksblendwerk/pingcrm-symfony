@@ -67,7 +67,7 @@ class ContactRepository extends ServiceEntityRepository
         }
 
         if ($trashed === null) {
-            $this->getEntityManager()->getFilters()->enable('softdeleteable');
+            $qb->andWhere($qb->expr()->isNull('contact.deletedAt'));
         } elseif ($trashed === 'only') {
             $qb->andWhere($qb->expr()->isNotNull('contact.deletedAt'));
         }

@@ -71,7 +71,7 @@ class OrganizationRepository extends ServiceEntityRepository
         }
 
         if ($trashed === null) {
-            $this->getEntityManager()->getFilters()->enable('softdeleteable');
+            $qb->andWhere($qb->expr()->isNull('organization.deletedAt'));
         } elseif ($trashed === 'only') {
             $qb->andWhere($qb->expr()->isNotNull('organization.deletedAt'));
         }

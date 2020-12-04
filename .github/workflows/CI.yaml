@@ -9,8 +9,13 @@ env:
 
 jobs:
     all_in_one:
-        name: Build, QA and Tests
         runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                php-versions: ['7.4', '8.0']
+
+        name: Build, QA and Tests on PHP ${{ matrix.php-versions }}
 
         services:
             mysql:
@@ -29,7 +34,7 @@ jobs:
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: '7.4'
+                    php-version: ${{ matrix.php-versions }}
                     coverage: none
                     tools: symfony
 
@@ -41,7 +46,6 @@ jobs:
             -   name: Install dependencies
                 run: |
                     composer install --ansi --no-progress
-                    composer phpunit-install --ansi -- --no-progress
                     yarn install --no-progress
 
             -   name: Build assets

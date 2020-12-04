@@ -1,4 +1,5 @@
 # Ping CRM on Symfony
+[![CI](https://github.com/aleksblendwerk/pingcrm-symfony/workflows/CI/badge.svg)](https://github.com/aleksblendwerk/pingcrm-symfony/actions)
 
 A demo application to illustrate how [Inertia.js](https://inertiajs.com/) works, ported to Symfony from Laravel.
 

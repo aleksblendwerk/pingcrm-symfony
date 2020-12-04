@@ -6,9 +6,10 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -18,14 +19,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="users")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @UniqueEntity("email")
  * @Vich\Uploadable()
  */
-class User implements UserInterface, \Serializable
+class User implements \Serializable, SoftDeletableInterface, TimestampableInterface, UserInterface
 {
-    use TimestampableEntity;
-    use SoftDeleteableEntity;
+    use SoftDeletableTrait;
+    use TimestampableTrait;
 
     /**
      * @ORM\Id
