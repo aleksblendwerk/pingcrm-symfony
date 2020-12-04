@@ -4,7 +4,14 @@ A demo application to illustrate how [Inertia.js](https://inertiajs.com/) works,
 
 ![Screenshot](screenshot.png)
 
+## About PHP 8.0
+
+The current version on `main` most likely won't install properly on PHP 8.0 as some dependencies are not ready yet.
+Please use PHP 7.4 in the meantime, I will try and add support for 8.0 as soon as possible.
+
 ## Installation
+
+Make sure you have the `symfony` binary ([Symfony CLI](https://symfony.com/download)) installed and in your `PATH`.
 
 Clone the repo locally:
 
@@ -35,7 +42,7 @@ Create the database, schema and load the initial data:
 composer build-database
 ```
 
-Run the dev server via [Symfony CLI](https://symfony.com/download):
+Run the dev server:
 
 ```sh
 symfony serve
