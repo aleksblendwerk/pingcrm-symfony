@@ -9,12 +9,13 @@ security:
                 class: App\Entity\User
                 property: email
 
+    enable_authenticator_manager: true
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: true
             lazy: true
             provider: app_user_provider
             entry_point: App\Security\MainEntryPoint
@@ -26,5 +27,5 @@ security:
                 path: logout
 
     access_control:
-        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login$, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED }
