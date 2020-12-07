@@ -1,6 +1,10 @@
 vich_uploader:
     db_driver: orm
 
+    metadata:
+        file_cache:
+            dir: '%kernel.build_dir%/vich_uploader'
+
     mappings:
         user_photo:
             uri_prefix: /images/
