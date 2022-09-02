@@ -1,2 +1,2 @@
 zenstruck_foundry:
-    auto_refresh_proxies: true
+    auto_refresh_proxies: false

@@ -208,7 +208,7 @@ class OrganizationControllerTest extends InertiaTestCase
         self::assertSame('Organization updated.', $props['flash']['success']);
 
         /** @var Organization $organization */
-        $organization = $organizationProxy->object(); // get the refreshed entity
+        $organization = $organizationProxy->refresh()->object(); // get the refreshed entity
 
         self::assertOrganizationPropsAndObjectContentsSame($organizationProps, $organization);
     }

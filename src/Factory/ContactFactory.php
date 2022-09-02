@@ -15,15 +15,15 @@ class ContactFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'firstName' => self::faker()->firstName,
-            'lastName' => self::faker()->lastName,
-            'email' => self::faker()->unique()->safeEmail,
-            'phone' => self::faker()->phoneNumber,
-            'address' => self::faker()->streetAddress,
-            'city' => self::faker()->city,
-            'region' => self::faker()->state,
+            'firstName' => self::faker()->firstName(),
+            'lastName' => self::faker()->lastName(),
+            'email' => self::faker()->unique()->safeEmail(),
+            'phone' => self::faker()->phoneNumber(),
+            'address' => self::faker()->streetAddress(),
+            'city' => self::faker()->city(),
+            'region' => self::faker()->state(),
             'country' => 'US',
-            'postalCode' => self::faker()->postcode
+            'postalCode' => self::faker()->postcode()
         ];
     }
 

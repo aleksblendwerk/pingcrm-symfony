@@ -15,7 +15,9 @@ class ContactControllerTest extends InertiaTestCase
 {
     public function testCanViewContacts(): void
     {
-        ContactFactory::new()->createMany(5, ['account' => JohnFromAcmeStory::load()->get('acme')]);
+        $a = JohnFromAcmeStory::acme();
+
+        ContactFactory::new()->createMany(5, ['account' => $a]);
 
         $this->client->xmlHttpRequest('GET', '/contacts', [], [], ['HTTP_X-Inertia' => true]);
 
@@ -224,7 +226,7 @@ class ContactControllerTest extends InertiaTestCase
         self::assertSame('Contact updated.', $props['flash']['success']);
 
         /** @var Contact $contact */
-        $contact = $contactProxy->object(); // get the refreshed entity
+        $contact = $contactProxy->refresh()->object(); // get the refreshed entity
 
         self::assertContactPropsAndObjectContentsSame($contactProps, $contact);
     }

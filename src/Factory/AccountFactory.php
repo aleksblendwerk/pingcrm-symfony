@@ -15,7 +15,7 @@ class AccountFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'name' => self::faker()->company
+            'name' => self::faker()->company()
         ];
     }
 
