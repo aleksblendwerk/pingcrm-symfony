@@ -174,14 +174,8 @@ class ContactController extends BaseController
      */
     protected function handleFormData(Request $request, Contact $contact, string $successMessage): array
     {
-        if (RequestHelper::stringOrNull($request->request, 'first_name') !== null) {
-            $contact->setFirstName(RequestHelper::stringOrNull($request->request, 'first_name'));
-        }
-
-        if (RequestHelper::stringOrNull($request->request, 'last_name') !== null) {
-            $contact->setLastName(RequestHelper::stringOrNull($request->request, 'last_name'));
-        }
-
+        $contact->setFirstName(RequestHelper::stringOrNull($request->request, 'first_name'));
+        $contact->setLastName(RequestHelper::stringOrNull($request->request, 'last_name'));
         $contact->setEmail(RequestHelper::stringOrNull($request->request, 'email'));
         $contact->setPhone(RequestHelper::stringOrNull($request->request, 'phone'));
         $contact->setAddress(RequestHelper::stringOrNull($request->request, 'address'));

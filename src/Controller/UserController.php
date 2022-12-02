@@ -125,21 +125,10 @@ class UserController extends BaseController
      */
     protected function handleFormData(Request $request, User $user, string $successMessage): array
     {
-        if (RequestHelper::stringOrNull($request->request, 'first_name') !== null) {
-            $user->setFirstName(RequestHelper::stringOrNull($request->request, 'first_name'));
-        }
-
-        if (RequestHelper::stringOrNull($request->request, 'last_name') !== null) {
-            $user->setLastName(RequestHelper::stringOrNull($request->request, 'last_name'));
-        }
-
-        if (RequestHelper::stringOrNull($request->request, 'email') !== null) {
-            $user->setEmail(RequestHelper::stringOrNull($request->request, 'email'));
-        }
-
-        if ($request->request->has('owner')) {
-            $user->setOwner($request->request->getBoolean('owner'));
-        }
+        $user->setFirstName(RequestHelper::stringOrNull($request->request, 'first_name'));
+        $user->setLastName(RequestHelper::stringOrNull($request->request, 'last_name'));
+        $user->setEmail(RequestHelper::stringOrNull($request->request, 'email'));
+        $user->setOwner($request->request->getBoolean('owner'));
 
         if (RequestHelper::stringOrNull($request->request, 'password') !== null) {
             $password = RequestHelper::stringOrNull($request->request, 'password');

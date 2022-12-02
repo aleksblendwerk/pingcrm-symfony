@@ -157,10 +157,7 @@ class OrganizationController extends BaseController
      */
     protected function handleFormData(Request $request, Organization $organization, string $successMessage): array
     {
-        if (RequestHelper::stringOrNull($request->request, 'name') !== null) {
-            $organization->setName(RequestHelper::stringOrNull($request->request, 'name'));
-        }
-
+        $organization->setName(RequestHelper::stringOrNull($request->request, 'name'));
         $organization->setEmail(RequestHelper::stringOrNull($request->request, 'email'));
         $organization->setPhone(RequestHelper::stringOrNull($request->request, 'phone'));
         $organization->setAddress(RequestHelper::stringOrNull($request->request, 'address'));
