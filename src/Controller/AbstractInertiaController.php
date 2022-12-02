@@ -8,8 +8,10 @@ use App\Controller\Traits\BuildInertiaDefaultPropsTrait;
 use App\Entity\User;
 use Rompetomp\InertiaBundle\Service\InertiaInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class AbstractInertiaController extends AbstractController
 {
@@ -19,17 +21,17 @@ abstract class AbstractInertiaController extends AbstractController
 
     protected ValidatorInterface $validator;
 
-    /**
-     * @required
-     */
+    public function __construct(protected RequestStack $requestStack)
+    {
+    }
+
+    #[Required]
     public function setInertia(InertiaInterface $inertia): void
     {
         $this->inertia = $inertia;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setValidator(ValidatorInterface $validator): void
     {
         $this->validator = $validator;
@@ -49,7 +51,7 @@ abstract class AbstractInertiaController extends AbstractController
         /** @var ?User $currentUser */
         $currentUser = $this->getUser();
 
-        $request = $this->get('request_stack')->getCurrentRequest();
+        $request = $this->requestStack->getCurrentRequest();
 
         if ($request === null) {
             throw new \RuntimeException('There is no current request.');

@@ -10,17 +10,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ErrorController extends BaseController
 {
-    /**
-     * @Route("/500", name="error_500")
-     */
+    #[Route(path: '/500', name: 'error_500')]
     public function internalServerError(): void
     {
         throw new HttpException(500);
     }
 
-    /**
-     * @Route("/404", name="error_404")
-     */
+    #[Route(path: '/404', name: 'error_404')]
     public function pageNotFound(): void
     {
         throw new NotFoundHttpException();

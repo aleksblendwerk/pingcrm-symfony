@@ -9,9 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ReportController extends BaseController
 {
-    /**
-     * @Route("/reports/", name="reports", methods={"GET"}, options={"expose"=true}))
-     */
+    #[Route(path: '/reports/', name: 'reports', options: ['expose' => true], methods: ['GET'])]
     public function index(): Response
     {
         return $this->renderWithInertia('Reports/Index');

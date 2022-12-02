@@ -18,7 +18,11 @@ class AppFixtures extends Fixture
         $account = new Account();
         $account->setName('Acme Corporation');
 
+        // TODO: this seems odd, let's investigate this some time...
         $manager->persist($account);
+        $manager->flush();
+
+        $manager->refresh($account);
 
         UserFactory::new()->create([
             'firstName' => 'John',

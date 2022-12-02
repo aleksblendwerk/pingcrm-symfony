@@ -36,7 +36,7 @@ class TrimRequestDataSubscriber implements EventSubscriberInterface
 
     public function trimRequestData(RequestEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
@@ -46,11 +46,6 @@ class TrimRequestDataSubscriber implements EventSubscriberInterface
     protected function clean(Request $request): void
     {
         $this->cleanParameterBag($request->query);
-
-        if ($request->request === $request->query) {
-            return;
-        }
-
         $this->cleanParameterBag($request->request);
     }
 
@@ -88,11 +83,7 @@ class TrimRequestDataSubscriber implements EventSubscriberInterface
         return $cleanedArray;
     }
 
-    /**
-     * @param mixed $value
-     * @return mixed
-     */
-    protected function cleanValue(string $key, $value)
+    protected function cleanValue(string $key, mixed $value): mixed
     {
         if (is_array($value)) {
             return $this->cleanArray($value, $key . '.');
@@ -102,10 +93,9 @@ class TrimRequestDataSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param mixed $value
      * @return mixed string
      */
-    protected function trim(string $key, $value)
+    protected function trim(string $key, mixed $value): mixed
     {
         if (!is_string($value)) {
             return $value;

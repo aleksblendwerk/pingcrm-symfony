@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Entity\User;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Zenstruck\Foundry\ModelFactory;
 
 class UserFactory extends ModelFactory
 {
-    protected UserPasswordEncoderInterface $userPasswordEncoder;
-
     /**
      * @var array<string, string>
      */
@@ -19,11 +17,9 @@ class UserFactory extends ModelFactory
         'secret' => '$argon2id$v=19$m=65536,t=4,p=1$ux1PEx9u0ynZ5KJG7k4xwA$0yBw3YwKSkI9nxr/djTS9FN86q1vveCM+vNUJBS8nFw'
     ];
 
-    public function __construct(UserPasswordEncoderInterface $userPasswordEncoder)
+    public function __construct(private UserPasswordHasherInterface $userPasswordHasher)
     {
         parent::__construct();
-
-        $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
     /**
@@ -56,7 +52,7 @@ class UserFactory extends ModelFactory
                 return;
             }
 
-            $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPassword()));
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, $user->getPassword()));
         });
     }
 

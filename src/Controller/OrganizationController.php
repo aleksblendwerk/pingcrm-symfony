@@ -8,6 +8,7 @@ use App\Controller\Traits\PaginationTrait;
 use App\Entity\Contact;
 use App\Entity\Organization;
 use App\Repository\OrganizationRepository;
+use App\Util\RequestHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,19 +21,17 @@ class OrganizationController extends BaseController
 {
     use PaginationTrait;
 
-    /**
-     * @Route(
-     *     "/organizations/{page}",
-     *     name="organizations",
-     *     requirements={"page"="\d+"},
-     *     methods={"GET"},
-     *     options={"expose"=true})
-     * )
-     */
+    #[Route(
+        path: '/organizations/{page}',
+        name: 'organizations',
+        requirements: ['page' => '\d+'],
+        options: ['expose' => true],
+        methods: ['GET']
+    )]
     public function index(Request $request, OrganizationRepository $organizationRepository, int $page = 1): Response
     {
-        $search = $request->get('search');
-        $trashed = $request->get('trashed');
+        $search = RequestHelper::stringOrNull($request->query, 'search');
+        $trashed = RequestHelper::stringOrNull($request->query, 'trashed');
 
         [$limit, $offset] = $this->getPaginationLimitAndOffset($page);
 
@@ -69,10 +68,18 @@ class OrganizationController extends BaseController
         );
     }
 
-    /**
-     * @Route("/organizations/create", name="organizations_create", methods={"GET"}, options={"expose"=true}))
-     * @Route("/organizations/create", name="organizations_store", methods={"POST"}, options={"expose"=true}))
-     */
+    #[Route(
+        path: '/organizations/create',
+        name: 'organizations_create',
+        options: ['expose' => true],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/organizations/create',
+        name: 'organizations_store',
+        options: ['expose' => true],
+        methods: ['POST']
+    )]
     public function create(Request $request): Response
     {
         if ($request->getMethod() === 'POST') {
@@ -93,10 +100,18 @@ class OrganizationController extends BaseController
         );
     }
 
-    /**
-     * @Route("/organizations/{id}/edit", name="organizations_edit", methods={"GET"}, options={"expose"=true}))
-     * @Route("/organizations/{id}/edit", name="organizations_update", methods={"PUT"}, options={"expose"=true}))
-     */
+    #[Route(
+        path: '/organizations/{id}/edit',
+        name: 'organizations_edit',
+        options: ['expose' => true],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/organizations/{id}/edit',
+        name: 'organizations_update',
+        options: ['expose' => true],
+        methods: ['PUT']
+    )]
     public function edit(Request $request, Organization $organization): Response
     {
         if ($request->getMethod() === 'PUT') {
@@ -142,14 +157,17 @@ class OrganizationController extends BaseController
      */
     protected function handleFormData(Request $request, Organization $organization, string $successMessage): array
     {
-        $organization->setName($request->request->get('name'));
-        $organization->setEmail($request->request->get('email'));
-        $organization->setPhone($request->request->get('phone'));
-        $organization->setAddress($request->request->get('address'));
-        $organization->setCity($request->request->get('city'));
-        $organization->setRegion($request->request->get('region'));
-        $organization->setCountry($request->request->get('country'));
-        $organization->setPostalCode($request->request->get('postal_code'));
+        if (RequestHelper::stringOrNull($request->request, 'name') !== null) {
+            $organization->setName(RequestHelper::stringOrNull($request->request, 'name'));
+        }
+
+        $organization->setEmail(RequestHelper::stringOrNull($request->request, 'email'));
+        $organization->setPhone(RequestHelper::stringOrNull($request->request, 'phone'));
+        $organization->setAddress(RequestHelper::stringOrNull($request->request, 'address'));
+        $organization->setCity(RequestHelper::stringOrNull($request->request, 'city'));
+        $organization->setRegion(RequestHelper::stringOrNull($request->request, 'region'));
+        $organization->setCountry(RequestHelper::stringOrNull($request->request, 'country'));
+        $organization->setPostalCode(RequestHelper::stringOrNull($request->request, 'postal_code'));
 
         $violations = $this->validator->validate($organization);
 
@@ -174,27 +192,31 @@ class OrganizationController extends BaseController
         return $errors;
     }
 
-    /**
-     * @Route("/organizations/{id}/destroy", name="organizations_destroy", methods={"DELETE"}, options={"expose"=true}))
-     */
+    #[Route(
+        path: '/organizations/{id}/destroy',
+        name: 'organizations_destroy',
+        options: ['expose' => true],
+        methods: ['DELETE']
+    )]
     public function destroy(Organization $organization): Response
     {
         $this->getDoctrine()->getManager()->remove($organization);
         $this->getDoctrine()->getManager()->flush();
-
         $this->addFlash('success', 'Contact deleted.');
 
         return new RedirectResponse($this->generateUrl('organizations_edit', ['id' => $organization->getId()]));
     }
 
-    /**
-     * @Route("/organizations/{id}/restore", name="organizations_restore", methods={"PUT"}, options={"expose"=true}))
-     */
+    #[Route(
+        path: '/organizations/{id}/restore',
+        name: 'organizations_restore',
+        options: ['expose' => true],
+        methods: ['PUT']
+    )]
     public function restore(Organization $organization): Response
     {
         $organization->setDeletedAt(null);
         $this->getDoctrine()->getManager()->flush();
-
         $this->addFlash('success', 'Organization restored.');
 
         return new RedirectResponse($this->generateUrl('organizations_edit', ['id' => $organization->getId()]));

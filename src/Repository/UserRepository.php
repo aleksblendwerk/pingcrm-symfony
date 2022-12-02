@@ -32,11 +32,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ?string $role,
         ?string $trashed
     ): array {
-        return $this->createQueryBuilderForFilter($account, $search, $role, $trashed)
+        $results = $this->createQueryBuilderForFilter($account, $search, $role, $trashed)
             ->addOrderBy('user.lastName')
             ->addOrderBy('user.firstName')
             ->getQuery()
             ->execute();
+
+        if (!is_array($results)) {
+            throw new \RuntimeException('Error retrieving filtered results');
+        }
+
+        return $results;
     }
 
     protected function createQueryBuilderForFilter(
@@ -84,7 +90,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
     {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
         $user->setPassword($newEncodedPassword);

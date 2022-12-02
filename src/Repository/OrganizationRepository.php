@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Account;
-use App\Entity\Contact;
 use App\Entity\Organization;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -30,7 +29,7 @@ class OrganizationRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array<int, Contact>
+     * @return array<int, Organization>
      */
     public function findAllMatchingFilter(
         Account $account,
@@ -46,14 +45,25 @@ class OrganizationRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 
-        return $qb->getQuery()->execute();
+        $results = $qb->getQuery()->execute();
+
+        if (!is_array($results)) {
+            throw new \RuntimeException('Error retrieving filtered results');
+        }
+
+        return $results;
     }
 
     public function countAllMatchingFilter(Account $account, ?string $search, ?string $trashed): int
     {
         $qb = $this->createQueryBuilderForFilter($account, $search, $trashed);
+        $count = $qb->select('COUNT(organization.id)')->getQuery()->getSingleScalarResult();
 
-        return (int) $qb->select('COUNT(organization.id)')->getQuery()->getSingleScalarResult();
+        if (!is_int($count)) {
+            throw new \RuntimeException('Error counnting filtered results');
+        }
+
+        return $count;
     }
 
     protected function createQueryBuilderForFilter(Account $account, ?string $search, ?string $trashed): QueryBuilder

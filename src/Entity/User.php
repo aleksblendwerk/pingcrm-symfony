@@ -12,88 +12,73 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="users")
- * @UniqueEntity("email")
- * @Vich\Uploadable()
- */
-class User implements \Serializable, SoftDeletableInterface, TimestampableInterface, UserInterface
+#[UniqueEntity('email')]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: 'users')]
+#[Vich\Uploadable]
+class User implements
+    PasswordAuthenticatedUserInterface,
+    SoftDeletableInterface,
+    TimestampableInterface,
+    UserInterface
 {
     use SoftDeletableTrait;
     use TimestampableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=50, unique=true)
-     * @Assert\NotBlank()
-     * @Assert\Length(max=50)
-     * @Assert\Email()
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
+    #[Assert\Email]
+    #[ORM\Column(type: 'string', length: 50, unique: true)]
     private string $email;
 
-    /**
-     * @ORM\Column(type="string", length=25)
-     * @Assert\NotBlank()
-     * @Assert\Length(max=25)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 25)]
+    #[ORM\Column(type: 'string', length: 25)]
     private string $firstName;
 
-    /**
-     * @ORM\Column(type="string", length=25)
-     * @Assert\NotBlank()
-     * @Assert\Length(max=25)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 25)]
+    #[ORM\Column(type: 'string', length: 25)]
     private string $lastName;
 
     /**
      * The hashed password
-     *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank(normalizer="trim")
      */
+    #[Assert\NotBlank(normalizer: 'trim')]
+    #[ORM\Column(type: 'string')]
     private string $password;
 
-    /**
-     * @ORM\Column(type="boolean")
-     * @Assert\NotNull()
-     */
+    #[Assert\NotNull]
+    #[ORM\Column(type: 'boolean')]
     private bool $owner = false;
 
-    /**
-     * @Assert\Image(mimeTypes={"image/jpeg", "image/png"}, minWidth=1, minHeight=1)
-     * @Vich\UploadableField(mapping="user_photo", fileNameProperty="photoFilename")
-     */
+    #[Assert\Image(mimeTypes: ['image/jpeg', 'image/png'], minWidth: 1, minHeight: 1)]
+    #[Vich\UploadableField(mapping: 'user_photo', fileNameProperty: 'photoFilename')]
     private ?File $photoFile = null;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private ?string $photoFilename = null;
 
     /**
      * @var array<int, string>
-     *
-     * @ORM\Column(type="json")
      */
+    #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="users")
-     * @ORM\JoinColumn(nullable=false)
-     * @Assert\NotNull()
-     * @Assert\Type("App\Entity\Account")
-     */
+    #[Assert\NotNull]
+    #[Assert\Type('App\Entity\Account')]
+    #[ORM\ManyToOne(targetEntity: Account::class, inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
     private Account $account;
 
     public function getId(): ?int
@@ -264,18 +249,38 @@ class User implements \Serializable, SoftDeletableInterface, TimestampableInterf
         return $this->getEmail() ?? 'Unknown User';
     }
 
-    public function serialize(): string
+    /**
+     * @return array<string, mixed>
+     */
+    public function __serialize(): array
     {
-        return serialize([$this->getId(), $this->getEmail(), $this->getPassword()]);
+        return [
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+            'password' => $this->getPassword()
+        ];
     }
 
     /**
-     * @param string $serialized
+     * @param array<string, mixed> $data
      */
-    // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-    public function unserialize($serialized): void
+    public function __unserialize(array $data): void
     {
-        [$this->id, $this->email, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
+        if (
+            count($data) === 0 ||
+            !array_key_exists('id', $data) ||
+            !array_key_exists('email', $data) ||
+            !array_key_exists('password', $data) ||
+            !is_int($data['id']) ||
+            !is_string($data['email']) ||
+            !is_string($data['password'])
+        ) {
+            throw new \RuntimeException('Unable to unserialize user!');
+        }
+
+        $this->id = $data['id'];
+        $this->email = $data['email'];
+        $this->password = $data['password'];
     }
 
     public function __toString(): string

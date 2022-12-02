@@ -11,45 +11,36 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
-/**
- * @ORM\Entity(repositoryClass=AccountRepository::class)
- * @ORM\Table(name="accounts")
- */
+#[ORM\Entity(repositoryClass: AccountRepository::class)]
+#[ORM\Table(name: 'accounts')]
 class Account implements TimestampableInterface
 {
     use TimestampableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
+    #[ORM\Column(type: 'string', length: 50)]
     private string $name;
 
     /**
      * @var Collection<int, Organization>
-     *
-     * @ORM\OneToMany(targetEntity=Organization::class, mappedBy="account")
      */
+    #[ORM\OneToMany(targetEntity: Organization::class, mappedBy: 'account')]
     private Collection $organizations;
 
     /**
      * @var Collection<int, Contact>
-     *
-     * @ORM\OneToMany(targetEntity=Contact::class, mappedBy="account", orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'account', orphanRemoval: true)]
     private Collection $contacts;
 
     /**
      * @var Collection<int, User>
-     *
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="account")
      */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'account')]
     private Collection $users;
 
     public function __construct()

@@ -25,7 +25,7 @@ class TransformJsonRequestSubscriber implements EventSubscriberInterface
 
     public function transformJsonRequest(RequestEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 

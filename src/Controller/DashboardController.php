@@ -9,9 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends BaseController
 {
-    /**
-     * @Route("/", name="dashboard", methods={"GET"}, options={"expose"=true})
-     */
+    #[Route(path: '/', name: 'dashboard', options: ['expose' => true], methods: ['GET'])]
     public function index(): Response
     {
         return $this->renderWithInertia('Dashboard/Index');

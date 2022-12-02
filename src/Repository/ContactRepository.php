@@ -38,14 +38,25 @@ class ContactRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 
-        return $qb->getQuery()->execute();
+        $results = $qb->getQuery()->execute();
+
+        if (!is_array($results)) {
+            throw new \RuntimeException('Error retrieving filtered results');
+        }
+
+        return $results;
     }
 
     public function countAllMatchingFilter(Account $account, ?string $search, ?string $trashed): int
     {
         $qb = $this->createQueryBuilderForFilter($account, $search, $trashed);
+        $count = $qb->select('COUNT(contact.id)')->getQuery()->getSingleScalarResult();
 
-        return (int) $qb->select('COUNT(contact.id)')->getQuery()->getSingleScalarResult();
+        if (!is_int($count)) {
+            throw new \RuntimeException('Error counnting filtered results');
+        }
+
+        return $count;
     }
 
     protected function createQueryBuilderForFilter(Account $account, ?string $search, ?string $trashed): QueryBuilder

@@ -14,86 +14,63 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=OrganizationRepository::class)
- * @ORM\Table(name="organizations")
- */
+#[ORM\Entity(repositoryClass: OrganizationRepository::class)]
+#[ORM\Table(name: 'organizations')]
 class Organization implements SoftDeletableInterface, TimestampableInterface
 {
     use SoftDeletableTrait;
     use TimestampableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="organizations")
-     * @ORM\JoinColumn(nullable=false)
-     * @Assert\NotNull()
-     * @Assert\Type("App\Entity\Account")
-     */
+    #[Assert\NotNull]
+    #[Assert\Type('App\Entity\Account')]
+    #[ORM\ManyToOne(targetEntity: Account::class, inversedBy: 'organizations')]
+    #[ORM\JoinColumn(nullable: false)]
     private Account $account;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     * @Assert\NotBlank()
-     * @Assert\Length(max=100)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
+    #[ORM\Column(type: 'string', length: 100)]
     private string $name;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     * @Assert\Length(max=50)
-     * @Assert\Email()
-     */
+    #[Assert\Length(max: 50)]
+    #[Assert\Email]
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $email = null;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     * @Assert\Length(max=50)
-     */
+    #[Assert\Length(max: 50)]
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $phone = null;
 
-    /**
-     * @ORM\Column(type="string", length=150, nullable=true)
-     * @Assert\Length(max=150)
-     */
+    #[Assert\Length(max: 150)]
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private ?string $address = null;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     * @Assert\Length(max=50)
-     */
+    #[Assert\Length(max: 50)]
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $city = null;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     * @Assert\Length(max=50)
-     */
+    #[Assert\Length(max: 50)]
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $region = null;
 
-    /**
-     * @ORM\Column(type="string", length=2, nullable=true)
-     * @Assert\Length(max=2)
-     */
+    #[Assert\Length(max: 2)]
+    #[ORM\Column(type: 'string', length: 2, nullable: true)]
     private ?string $country = null;
 
-    /**
-     * @ORM\Column(type="string", length=25, nullable=true)
-     * @Assert\Length(max=25)
-     */
+    #[Assert\Length(max: 25)]
+    #[ORM\Column(type: 'string', length: 25, nullable: true)]
     private ?string $postalCode = null;
 
     /**
      * @var Collection<int, Contact>
-     *
-     * @ORM\OneToMany(targetEntity=Contact::class, mappedBy="organization")
-     * @ORM\OrderBy({"lastName" = "ASC", "firstName" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'organization')]
+    #[ORM\OrderBy(['lastName' => 'ASC', 'firstName' => 'ASC'])]
     private Collection $contacts;
 
     public function __construct()

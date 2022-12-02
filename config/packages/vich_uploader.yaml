@@ -2,6 +2,7 @@ vich_uploader:
     db_driver: orm
 
     metadata:
+        type: attribute
         file_cache:
             dir: '%kernel.build_dir%/vich_uploader'
 

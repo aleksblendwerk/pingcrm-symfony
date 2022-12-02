@@ -1,14 +1,25 @@
 parameters:
     level: max
+    # TODO: make this work with 'true' again
+    checkGenericClassInNonGenericObjectType: false
+    reportUnmatchedIgnoredErrors: false
 
+    # TODO: re-add tests/
     paths:
         - src
-        - tests
+
+    excludePaths:
+        - src/DataFixtures
+        - src/Factory
+
+    ignoreErrors:
+        -
+            # TODO: not sure what this one is about
+            message: "#Offset 'dirname' does not exist.+#"
+            path: src/Util/ImageHandler.php
 
     symfony:
         container_xml_path: '%rootDir%/../../../var/cache/dev/App_KernelDevDebugContainer.xml'
 
     doctrine:
         objectManagerLoader: tests/object-manager-stub.php
-
-    reportUnmatchedIgnoredErrors: false

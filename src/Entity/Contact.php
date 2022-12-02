@@ -12,90 +12,64 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=ContactRepository::class)
- * @ORM\Table(name="contacts")
- */
+#[ORM\Entity(repositoryClass: ContactRepository::class)]
+#[ORM\Table(name: 'contacts')]
 class Contact implements SoftDeletableInterface, TimestampableInterface
 {
     use SoftDeletableTrait;
     use TimestampableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="contacts")
-     * @ORM\JoinColumn(nullable=false)
-     * @Assert\NotNull()
-     * @Assert\Type("App\Entity\Account")
-     */
+    #[Assert\NotNull]
+    #[Assert\Type('App\Entity\Account')]
+    #[ORM\ManyToOne(targetEntity: Account::class, inversedBy: 'contacts')]
+    #[ORM\JoinColumn(nullable: false)]
     private Account $account;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="contacts")
-     */
+    #[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'contacts')]
     private ?Organization $organization = null;
 
-    /**
-     * @ORM\Column(type="string", length=25)
-     * @Assert\NotBlank()
-     * @Assert\Length(max=25)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 25)]
+    #[ORM\Column(type: 'string', length: 25)]
     private string $firstName;
 
-    /**
-     * @ORM\Column(type="string", length=25)
-     * @Assert\NotBlank()
-     * @Assert\Length(max=25)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 25)]
+    #[ORM\Column(type: 'string', length: 25)]
     private string $lastName;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     * @Assert\Length(max=50)
-     * @Assert\Email()
-     */
+    #[Assert\Length(max: 50)]
+    #[Assert\Email]
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $email = null;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     * @Assert\Length(max=50)
-     */
+    #[Assert\Length(max: 50)]
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $phone = null;
 
-    /**
-     * @ORM\Column(type="string", length=150, nullable=true)
-     * @Assert\Length(max=150)
-     */
+    #[Assert\Length(max: 150)]
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
     private ?string $address = null;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     * @Assert\Length(max=50)
-     */
+    #[Assert\Length(max: 50)]
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $city = null;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     * @Assert\Length(max=50)
-     */
+    #[Assert\Length(max: 50)]
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $region = null;
 
-    /**
-     * @ORM\Column(type="string", length=2, nullable=true)
-     * @Assert\Length(max=2)
-     */
+    #[Assert\Length(max: 2)]
+    #[ORM\Column(type: 'string', length: 2, nullable: true)]
     private ?string $country = null;
 
-    /**
-     * @ORM\Column(type="string", length=25, nullable=true)
-     * @Assert\Length(max=25)
-     */
+    #[Assert\Length(max: 25)]
+    #[ORM\Column(type: 'string', length: 25, nullable: true)]
     private ?string $postalCode = null;
 
     public function getId(): ?int

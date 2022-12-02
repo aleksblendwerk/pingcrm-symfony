@@ -7,16 +7,12 @@ namespace App\Controller;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends BaseController
 {
-    /**
-     * @Route("/login", name="login", methods={"GET"}, options={"expose"=true}))
-     * @Route("/login", name="login_attempt", methods={"POST"}, options={"expose"=true}))
-     */
-    // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    #[Route(path: '/login', name: 'login', options: ['expose' => true], methods: ['GET'])]
+    #[Route(path: '/login', name: 'login_attempt', options: ['expose' => true], methods: ['POST'])]
+    public function login(): Response
     {
         /** @var ?User $currentUser */
         $currentUser = $this->getUser();

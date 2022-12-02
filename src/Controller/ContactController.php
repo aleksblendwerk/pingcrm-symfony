@@ -9,6 +9,7 @@ use App\Entity\Contact;
 use App\Entity\Organization;
 use App\Repository\ContactRepository;
 use App\Repository\OrganizationRepository;
+use App\Util\RequestHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,19 +22,17 @@ class ContactController extends BaseController
 {
     use PaginationTrait;
 
-    /**
-     * @Route(
-     *     "/contacts/{page}",
-     *     name="contacts",
-     *     requirements={"page"="\d+"},
-     *     methods={"GET"},
-     *     options={"expose"=true})
-     * )
-     */
+    #[Route(
+        path: '/contacts/{page}',
+        name: 'contacts',
+        requirements: ['page' => '\d+'],
+        options: ['expose' => true],
+        methods: ['GET']
+    )]
     public function index(Request $request, ContactRepository $contactRepository, int $page = 1): Response
     {
-        $search = $request->get('search');
-        $trashed = $request->get('trashed');
+        $search = RequestHelper::stringOrNull($request->query, 'search');
+        $trashed = RequestHelper::stringOrNull($request->query, 'trashed');
 
         [$limit, $offset] = $this->getPaginationLimitAndOffset($page);
 
@@ -73,10 +72,18 @@ class ContactController extends BaseController
         );
     }
 
-    /**
-     * @Route("/contacts/create", name="contacts_create", methods={"GET"}, options={"expose"=true}))
-     * @Route("/contacts/create", name="contacts_store", methods={"POST"}, options={"expose"=true}))
-     */
+    #[Route(
+        path: '/contacts/create',
+        name: 'contacts_create',
+        options: ['expose' => true],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/contacts/create',
+        name: 'contacts_store',
+        options: ['expose' => true],
+        methods: ['POST']
+    )]
     public function create(Request $request, OrganizationRepository $organizationRepository): Response
     {
         if ($request->getMethod() === 'POST') {
@@ -110,10 +117,18 @@ class ContactController extends BaseController
         );
     }
 
-    /**
-     * @Route("/contacts/{id}/edit", name="contacts_edit", methods={"GET"}, options={"expose"=true}))
-     * @Route("/contacts/{id}/edit", name="contacts_update", methods={"PUT"}, options={"expose"=true}))
-     */
+    #[Route(
+        path: '/contacts/{id}/edit',
+        name: 'contacts_edit',
+        options: ['expose' => true],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/contacts/{id}/edit',
+        name: 'contacts_update',
+        options: ['expose' => true],
+        methods: ['PUT']
+    )]
     public function edit(Request $request, Contact $contact, OrganizationRepository $organizationRepository): Response
     {
         if ($request->getMethod() === 'PUT') {
@@ -159,18 +174,28 @@ class ContactController extends BaseController
      */
     protected function handleFormData(Request $request, Contact $contact, string $successMessage): array
     {
-        $contact->setFirstName($request->request->get('first_name'));
-        $contact->setLastName($request->request->get('last_name'));
-        $contact->setEmail($request->request->get('email'));
-        $contact->setPhone($request->request->get('phone'));
-        $contact->setAddress($request->request->get('address'));
-        $contact->setCity($request->request->get('city'));
-        $contact->setRegion($request->request->get('region'));
-        $contact->setCountry($request->request->get('country'));
-        $contact->setPostalCode($request->request->get('postal_code'));
+        if (RequestHelper::stringOrNull($request->request, 'first_name') !== null) {
+            $contact->setFirstName(RequestHelper::stringOrNull($request->request, 'first_name'));
+        }
+
+        if (RequestHelper::stringOrNull($request->request, 'last_name') !== null) {
+            $contact->setLastName(RequestHelper::stringOrNull($request->request, 'last_name'));
+        }
+
+        $contact->setEmail(RequestHelper::stringOrNull($request->request, 'email'));
+        $contact->setPhone(RequestHelper::stringOrNull($request->request, 'phone'));
+        $contact->setAddress(RequestHelper::stringOrNull($request->request, 'address'));
+        $contact->setCity(RequestHelper::stringOrNull($request->request, 'city'));
+        $contact->setRegion(RequestHelper::stringOrNull($request->request, 'region'));
+        $contact->setCountry(RequestHelper::stringOrNull($request->request, 'country'));
+        $contact->setPostalCode(RequestHelper::stringOrNull($request->request, 'postal_code'));
 
         // TODO: this manual validation step could probably be done in a more elegant way...
-        $organizationId = $request->request->get('organization_id');
+        if (RequestHelper::intOrNull($request->request, 'organization_id') !== null) {
+            $organizationId = $request->request->getInt('organization_id');
+        } else {
+            $organizationId = null;
+        }
 
         $invalidOrganizationIdGiven = false;
 
@@ -211,27 +236,31 @@ class ContactController extends BaseController
         return $errors;
     }
 
-    /**
-     * @Route("/contacts/{id}/destroy", name="contacts_destroy", methods={"DELETE"}, options={"expose"=true}))
-     */
+    #[Route(
+        path: '/contacts/{id}/destroy',
+        name: 'contacts_destroy',
+        options: ['expose' => true],
+        methods: ['DELETE']
+    )]
     public function destroy(Contact $contact): Response
     {
         $this->getDoctrine()->getManager()->remove($contact);
         $this->getDoctrine()->getManager()->flush();
-
         $this->addFlash('success', 'Contact deleted.');
 
         return new RedirectResponse($this->generateUrl('contacts_edit', ['id' => $contact->getId()]));
     }
 
-    /**
-     * @Route("/contacts/{id}/restore", name="contacts_restore", methods={"PUT"}, options={"expose"=true}))
-     */
+    #[Route(
+        path: '/contacts/{id}/restore',
+        name: 'contacts_restore',
+        options: ['expose' => true],
+        methods: ['PUT']
+    )]
     public function restore(Contact $contact): Response
     {
         $contact->setDeletedAt(null);
         $this->getDoctrine()->getManager()->flush();
-
         $this->addFlash('success', 'Contact restored.');
 
         return new RedirectResponse($this->generateUrl('contacts_edit', ['id' => $contact->getId()]));
