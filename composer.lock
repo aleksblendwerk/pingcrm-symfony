@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cca4f02e418b2d234452adb86957930e",
+    "content-hash": "e0429baba34f08b07a81af5d5a7756f7",
     "packages": [
         {
             "name": "brick/math",
@@ -134,64 +134,6 @@
                 }
             ],
             "time": "2022-01-17T14:14:24+00:00"
-        },
-        {
-            "name": "dneustadt/csrf-cookie-bundle",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dneustadt/DneustadtCsrfCookieBundle.git",
-                "reference": "adf351ada4245b4484a6ae3ef7c387a0aaa0867a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dneustadt/DneustadtCsrfCookieBundle/zipball/adf351ada4245b4484a6ae3ef7c387a0aaa0867a",
-                "reference": "adf351ada4245b4484a6ae3ef7c387a0aaa0867a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2.5",
-                "symfony/config": "^5.0",
-                "symfony/dependency-injection": "^5.0",
-                "symfony/http-foundation": "^5.0",
-                "symfony/http-kernel": "^5.0",
-                "symfony/security-csrf": "^5.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "Dneustadt\\CsrfCookieBundle\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "David Neustadt",
-                    "email": "d@neustadt.dev",
-                    "homepage": "https://neustadt.dev"
-                }
-            ],
-            "description": "CSRF protection cookie for use with XHR",
-            "homepage": "https://neustadt.dev",
-            "keywords": [
-                "Vue.js",
-                "ajax",
-                "angular",
-                "axios",
-                "csrf",
-                "react",
-                "security",
-                "xhr",
-                "xsrf"
-            ],
-            "support": {
-                "issues": "https://github.com/dneustadt/DneustadtCsrfCookieBundle/issues",
-                "source": "https://github.com/dneustadt/DneustadtCsrfCookieBundle/tree/1.0.3"
-            },
-            "time": "2022-03-31T15:19:02+00:00"
         },
         {
             "name": "doctrine/annotations",

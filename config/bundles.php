@@ -17,6 +17,5 @@ return [
     Rompetomp\InertiaBundle\RompetompInertiaBundle::class => ['all' => true],
     FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
-    Dneustadt\CsrfCookieBundle\DneustadtCsrfCookieBundle::class => ['dev' => true, 'prod' => true],
     Knp\DoctrineBehaviors\DoctrineBehaviorsBundle::class => ['all' => true],
 ];
