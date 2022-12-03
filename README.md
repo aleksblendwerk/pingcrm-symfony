@@ -5,7 +5,7 @@ A demo application to illustrate how [Inertia.js](https://inertiajs.com/) works,
 
 ![Screenshot](screenshot.png)
 
-Tested on both PHP 7.4 and 8.0.
+Requires and is tested with PHP 8.1.
 
 ## Installation
 
@@ -61,18 +61,6 @@ Run the Ping CRM tests:
 ```
 composer test
 ```
-
-## Remarks
-
-One of the goals for this port was to leave the original JS side of things unchanged.
-This promise has been kept, aside from one or two very minor changes.
-As a result, the PHP backend code occasionally has to jump through a few hoops to mimic the expected response data 
-formats which are partly catered to Laravel's out-of-the-box features.
-
-Also, I am currently not really satisfied with the whole validation workflow, this might eventually get an overhaul.
-
-Consider this a proof of concept, I am sure there is room for improvements. 
-If any fellow Symfony developers want to join in to tackle things in more concise or elegant ways, let's go for it!
 
 ## Credits
 
