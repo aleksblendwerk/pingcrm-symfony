@@ -13,7 +13,7 @@ jobs:
 
         strategy:
             matrix:
-                php-versions: ['7.4', '8.0']
+                php-versions: ['8.1']
 
         name: Build, QA and Tests on PHP ${{ matrix.php-versions }}
 
@@ -29,7 +29,7 @@ jobs:
 
         steps:
             -   name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
@@ -39,7 +39,7 @@ jobs:
                     tools: symfony
 
             -   name: Setup Node.js
-                uses: actions/setup-node@v1
+                uses: actions/setup-node@v3
                 with:
                     node-version: '14'
 
