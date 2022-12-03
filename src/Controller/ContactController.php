@@ -136,11 +136,11 @@ class ContactController extends BaseController
         path: '/contacts/{id}/edit',
         name: 'contacts_update',
         options: ['expose' => true],
-        methods: ['PUT']
+        methods: ['POST']
     )]
     public function edit(Request $request, Contact $contact, OrganizationRepository $organizationRepository): Response
     {
-        if ($request->getMethod() === 'PUT') {
+        if ($request->getMethod() === 'POST') {
             $errors = $this->handleFormData($request, $contact, 'Contact updated.');
 
             if (count($errors) === 0) {

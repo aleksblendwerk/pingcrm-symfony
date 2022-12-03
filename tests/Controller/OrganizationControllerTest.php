@@ -189,7 +189,7 @@ class OrganizationControllerTest extends InertiaTestCase
         $organizationProps['email'] = 'test@example.com';
 
         $this->client->xmlHttpRequest(
-            'PUT',
+            'POST',
             $url,
             [],
             [],
@@ -242,7 +242,7 @@ class OrganizationControllerTest extends InertiaTestCase
 
         $url = sprintf('/organizations/%d/edit', $organization->getId());
 
-        $this->client->xmlHttpRequest('PUT', $url, [], [], ['HTTP_X-Inertia' => true]);
+        $this->client->xmlHttpRequest('POST', $url, [], [], ['HTTP_X-Inertia' => true]);
 
         $response = $this->client->getResponse();
 

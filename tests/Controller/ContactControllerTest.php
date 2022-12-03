@@ -207,7 +207,7 @@ class ContactControllerTest extends InertiaTestCase
         $contactProps['email'] = 'test@example.com';
 
         $this->client->xmlHttpRequest(
-            'PUT',
+            'POST',
             $url,
             [],
             [],
@@ -257,7 +257,7 @@ class ContactControllerTest extends InertiaTestCase
 
         $url = sprintf('/contacts/%d/edit', $contact->getId());
 
-        $this->client->xmlHttpRequest('PUT', $url, [], [], ['HTTP_X-Inertia' => true]);
+        $this->client->xmlHttpRequest('POST', $url, [], [], ['HTTP_X-Inertia' => true]);
 
         $response = $this->client->getResponse();
 

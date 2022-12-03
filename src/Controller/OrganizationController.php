@@ -119,11 +119,11 @@ class OrganizationController extends BaseController
         path: '/organizations/{id}/edit',
         name: 'organizations_update',
         options: ['expose' => true],
-        methods: ['PUT']
+        methods: ['POST']
     )]
     public function edit(Request $request, Organization $organization): Response
     {
-        if ($request->getMethod() === 'PUT') {
+        if ($request->getMethod() === 'POST') {
             $errors = $this->handleFormData($request, $organization, 'Organization updated.');
 
             if (count($errors) === 0) {

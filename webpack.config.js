@@ -57,9 +57,9 @@ Encore
     //.enableSassLoader()
     .enablePostCssLoader()
 
-    .enableVueLoader()
+    .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
     .addAliases({
-        vue$: 'vue/dist/vue.runtime.esm.js',
+        vue$: 'vue/dist/vue.esm-bundler.js',
         '@': path.resolve('assets/js')
     })
 

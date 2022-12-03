@@ -1,29 +1,17 @@
-import '../css/app.css';
+import '../css/app.css'
 
-import Vue from 'vue'
-import VueMeta from 'vue-meta'
-import PortalVue from 'portal-vue'
-import { InertiaApp } from '@inertiajs/inertia-vue'
-import { InertiaProgress } from '@inertiajs/progress/src'
-
-Vue.config.productionTip = false
-Vue.mixin({ methods: { route: window.route } })
-Vue.use(InertiaApp)
-Vue.use(PortalVue)
-Vue.use(VueMeta)
+import { createApp, h } from 'vue'
+import { InertiaProgress } from '@inertiajs/progress'
+import { createInertiaApp } from '@inertiajs/inertia-vue3'
 
 InertiaProgress.init()
 
-let app = document.getElementById('app')
-
-new Vue({
-  metaInfo: {
-    titleTemplate: (title) => title ? `${title} - Ping CRM` : 'Ping CRM'
+createInertiaApp({
+  resolve: name => require(`./Pages/${name}`),
+  title: title => title ? `${title} - Ping CRM` : 'Ping CRM',
+  setup({ el, App, props, plugin }) {
+    createApp({ render: () => h(App, props) })
+      .use(plugin)
+      .mount(el)
   },
-  render: h => h(InertiaApp, {
-    props: {
-      initialPage: JSON.parse(app.dataset.page),
-      resolveComponent: name => import(`@/Pages/${name}`).then(module => module.default),
-    },
-  }),
-}).$mount(app)
+})

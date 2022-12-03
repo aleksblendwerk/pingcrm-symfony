@@ -85,10 +85,10 @@ class UserController extends BaseController
     }
 
     #[Route(path: '/users/{id}/edit', name: 'users_edit', options: ['expose' => true], methods: ['GET'])]
-    #[Route(path: '/users/{id}/edit', name: 'users_update', options: ['expose' => true], methods: ['PUT'])]
+    #[Route(path: '/users/{id}', name: 'users_update', options: ['expose' => true], methods: ['POST'])]
     public function edit(Request $request, User $user): Response
     {
-        if ($request->getMethod() === 'PUT') {
+        if ($request->getMethod() === 'POST') {
             $errors = $this->handleFormData($request, $user, 'User updated.');
 
             if (count($errors) === 0) {
