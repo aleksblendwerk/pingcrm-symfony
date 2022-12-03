@@ -249,6 +249,11 @@ class User implements
         return $this->getEmail() ?? 'Unknown User';
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->getUsername();
+    }
+
     /**
      * @return array<string, mixed>
      */

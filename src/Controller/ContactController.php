@@ -10,8 +10,10 @@ use App\Entity\Organization;
 use App\Repository\ContactRepository;
 use App\Repository\OrganizationRepository;
 use App\Util\RequestHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\ConstraintViolationInterface;
@@ -21,6 +23,13 @@ use function Symfony\Component\String\s;
 class ContactController extends BaseController
 {
     use PaginationTrait;
+
+    public function __construct(
+        RequestStack $requestStack,
+        private EntityManagerInterface $entityManager
+    ) {
+        parent::__construct($requestStack);
+    }
 
     #[Route(
         path: '/contacts/{page}',
@@ -194,7 +203,7 @@ class ContactController extends BaseController
         $invalidOrganizationIdGiven = false;
 
         if ($organizationId !== null) {
-            $organization = $this->getDoctrine()->getRepository(Organization::class)->find($organizationId);
+            $organization = $this->entityManager->getRepository(Organization::class)->find($organizationId);
 
             if ($organization !== null) {
                 $contact->setOrganization($organization);
@@ -206,8 +215,8 @@ class ContactController extends BaseController
         $violations = $this->validator->validate($contact);
 
         if (!$invalidOrganizationIdGiven && $violations->count() === 0) {
-            $this->getDoctrine()->getManager()->persist($contact);
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->persist($contact);
+            $this->entityManager->flush();
 
             $this->addFlash('success', $successMessage);
 
@@ -238,8 +247,8 @@ class ContactController extends BaseController
     )]
     public function destroy(Contact $contact): Response
     {
-        $this->getDoctrine()->getManager()->remove($contact);
-        $this->getDoctrine()->getManager()->flush();
+        $this->entityManager->remove($contact);
+        $this->entityManager->flush();
         $this->addFlash('success', 'Contact deleted.');
 
         return new RedirectResponse($this->generateUrl('contacts_edit', ['id' => $contact->getId()]));
@@ -254,7 +263,7 @@ class ContactController extends BaseController
     public function restore(Contact $contact): Response
     {
         $contact->setDeletedAt(null);
-        $this->getDoctrine()->getManager()->flush();
+        $this->entityManager->flush();
         $this->addFlash('success', 'Contact restored.');
 
         return new RedirectResponse($this->generateUrl('contacts_edit', ['id' => $contact->getId()]));

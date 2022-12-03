@@ -9,8 +9,10 @@ use App\Entity\Contact;
 use App\Entity\Organization;
 use App\Repository\OrganizationRepository;
 use App\Util\RequestHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\ConstraintViolationInterface;
@@ -20,6 +22,13 @@ use function Symfony\Component\String\s;
 class OrganizationController extends BaseController
 {
     use PaginationTrait;
+
+    public function __construct(
+        RequestStack $requestStack,
+        private EntityManagerInterface $entityManager
+    ) {
+        parent::__construct($requestStack);
+    }
 
     #[Route(
         path: '/organizations/{page}',
@@ -169,8 +178,8 @@ class OrganizationController extends BaseController
         $violations = $this->validator->validate($organization);
 
         if ($violations->count() === 0) {
-            $this->getDoctrine()->getManager()->persist($organization);
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->persist($organization);
+            $this->entityManager->flush();
 
             $this->addFlash('success', $successMessage);
 
@@ -197,8 +206,8 @@ class OrganizationController extends BaseController
     )]
     public function destroy(Organization $organization): Response
     {
-        $this->getDoctrine()->getManager()->remove($organization);
-        $this->getDoctrine()->getManager()->flush();
+        $this->entityManager->remove($organization);
+        $this->entityManager->flush();
         $this->addFlash('success', 'Contact deleted.');
 
         return new RedirectResponse($this->generateUrl('organizations_edit', ['id' => $organization->getId()]));
@@ -213,7 +222,7 @@ class OrganizationController extends BaseController
     public function restore(Organization $organization): Response
     {
         $organization->setDeletedAt(null);
-        $this->getDoctrine()->getManager()->flush();
+        $this->entityManager->flush();
         $this->addFlash('success', 'Organization restored.');
 
         return new RedirectResponse($this->generateUrl('organizations_edit', ['id' => $organization->getId()]));

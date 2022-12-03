@@ -645,9 +645,6 @@
     "symfony/security-csrf": {
         "version": "v5.1.8"
     },
-    "symfony/security-guard": {
-        "version": "v5.1.8"
-    },
     "symfony/security-http": {
         "version": "v5.1.8"
     },

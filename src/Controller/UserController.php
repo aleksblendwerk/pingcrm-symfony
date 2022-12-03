@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Util\ImageHandler;
 use App\Util\RequestHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,8 @@ class UserController extends BaseController
 {
     public function __construct(
         RequestStack $requestStack,
-        private UserPasswordHasherInterface $userPasswordHasher
+        private UserPasswordHasherInterface $userPasswordHasher,
+        private EntityManagerInterface $entityManager
     ) {
         parent::__construct($requestStack);
     }
@@ -111,7 +113,7 @@ class UserController extends BaseController
          * we need to assure we reload a valid state here, otherwise this will mess up the authentication system
          */
         if ($request->getMethod() === 'PUT' && $user === $this->getUser()) {
-            $this->getDoctrine()->getManager()->refresh($user);
+            $this->entityManager->refresh($user);
         }
 
         return $this->renderWithInertia('Users/Edit', [
@@ -149,8 +151,8 @@ class UserController extends BaseController
         $violations = $this->validator->validate($user);
 
         if ($violations->count() === 0) {
-            $this->getDoctrine()->getManager()->persist($user);
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
 
             $this->addFlash('success', $successMessage);
 
@@ -183,8 +185,8 @@ class UserController extends BaseController
     #[Route(path: '/users/{id}/destroy', name: 'users_destroy', options: ['expose' => true], methods: ['DELETE'])]
     public function destroy(User $user): Response
     {
-        $this->getDoctrine()->getManager()->remove($user);
-        $this->getDoctrine()->getManager()->flush();
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
         $this->addFlash('success', 'User deleted.');
 
         return new RedirectResponse($this->generateUrl('users_edit', ['id' => $user->getId()]));
@@ -194,7 +196,7 @@ class UserController extends BaseController
     public function restore(User $user): Response
     {
         $user->setDeletedAt(null);
-        $this->getDoctrine()->getManager()->flush();
+        $this->entityManager->flush();
         $this->addFlash('success', 'User restored.');
 
         return new RedirectResponse($this->generateUrl('users_edit', ['id' => $user->getId()]));
