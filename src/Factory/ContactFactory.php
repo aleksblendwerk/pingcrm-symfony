@@ -7,6 +7,9 @@ namespace App\Factory;
 use App\Entity\Contact;
 use Zenstruck\Foundry\ModelFactory;
 
+/**
+ * @extends ModelFactory<Contact>
+ */
 class ContactFactory extends ModelFactory
 {
     /**

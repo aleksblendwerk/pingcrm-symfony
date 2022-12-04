@@ -13,7 +13,7 @@ class OrganizationControllerTest extends InertiaTestCase
 {
     public function testCanViewOrganizations(): void
     {
-        OrganizationFactory::new()->createMany(5, ['account' => JohnFromAcmeStory::load()->get('acme')]);
+        OrganizationFactory::new()::createMany(5, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
         $this->client->xmlHttpRequest('GET', '/organizations', [], [], ['HTTP_X-Inertia' => true]);
 
@@ -30,10 +30,10 @@ class OrganizationControllerTest extends InertiaTestCase
     {
         OrganizationFactory::new()->create([
             'name' => 'Some Big Fancy Company Name',
-            'account' => JohnFromAcmeStory::load()->get('acme')
+            'account' => JohnFromAcmeStory::load()::get('acme')
         ]);
 
-        OrganizationFactory::new()->createMany(4, ['account' => JohnFromAcmeStory::load()->get('acme')]);
+        OrganizationFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
         $this->client->xmlHttpRequest(
             'GET',
@@ -58,10 +58,10 @@ class OrganizationControllerTest extends InertiaTestCase
     {
         OrganizationFactory::new()->create([
             'name' => 'Some Big Fancy Company Name',
-            'account' => JohnFromAcmeStory::load()->get('acme')
+            'account' => JohnFromAcmeStory::load()::get('acme')
         ])->remove();
 
-        OrganizationFactory::new()->createMany(4, ['account' => JohnFromAcmeStory::load()->get('acme')]);
+        OrganizationFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
         $this->client->xmlHttpRequest('GET', '/organizations', [], [], ['HTTP_X-Inertia' => true]);
 
@@ -78,10 +78,10 @@ class OrganizationControllerTest extends InertiaTestCase
     {
         OrganizationFactory::new()->create([
            'name' => 'Some Big Fancy Company Name',
-           'account' => JohnFromAcmeStory::load()->get('acme')
+           'account' => JohnFromAcmeStory::load()::get('acme')
         ])->remove();
 
-        OrganizationFactory::new()->createMany(4, ['account' => JohnFromAcmeStory::load()->get('acme')]);
+        OrganizationFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
         $this->client->xmlHttpRequest('GET', '/organizations?trashed=with', [], [], ['HTTP_X-Inertia' => true]);
 
@@ -165,7 +165,7 @@ class OrganizationControllerTest extends InertiaTestCase
 
     public function testCanEditAndUpdateOrganization(): void
     {
-        $organizationProxy = OrganizationFactory::new()->create(['account' => JohnFromAcmeStory::load()->get('acme')]);
+        $organizationProxy = OrganizationFactory::new()->create(['account' => JohnFromAcmeStory::load()::get('acme')]);
 
         /** @var Organization $organization */
         $organization = $organizationProxy->object();
@@ -237,7 +237,7 @@ class OrganizationControllerTest extends InertiaTestCase
     {
         /** @var Organization $organization */
         $organization = OrganizationFactory::new()
-            ->create(['account' => JohnFromAcmeStory::load()->get('acme')])
+            ->create(['account' => JohnFromAcmeStory::load()::get('acme')])
             ->object();
 
         $url = sprintf('/organizations/%d/edit', $organization->getId());

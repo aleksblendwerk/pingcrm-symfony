@@ -8,6 +8,9 @@ use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Zenstruck\Foundry\ModelFactory;
 
+/**
+ * @extends ModelFactory<User>
+ */
 class UserFactory extends ModelFactory
 {
     /**

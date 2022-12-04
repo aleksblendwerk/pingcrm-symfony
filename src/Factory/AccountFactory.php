@@ -7,6 +7,9 @@ namespace App\Factory;
 use App\Entity\Account;
 use Zenstruck\Foundry\ModelFactory;
 
+/**
+ * @extends ModelFactory<Account>
+ */
 class AccountFactory extends ModelFactory
 {
     /**

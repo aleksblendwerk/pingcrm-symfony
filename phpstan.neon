@@ -1,22 +1,28 @@
 parameters:
     level: max
-    # TODO: make this work with 'true' again
-    checkGenericClassInNonGenericObjectType: false
     reportUnmatchedIgnoredErrors: false
 
-    # TODO: re-add tests/
     paths:
         - src
-
-    excludePaths:
-        - src/DataFixtures
-        - src/Factory
+        - tests
 
     ignoreErrors:
         -
-            # TODO: not sure what this one is about
+            # not sure what this one is about
             message: "#Offset 'dirname' does not exist.+#"
             path: src/Util/ImageHandler.php
+        -
+            # not today
+            message: '#Call to an undefined method Faker\\Generator::state\(\)#'
+            path: src/Factory/*Factory.php
+        -
+            # not today
+            message: '#Cannot access offset .+ on mixed\.#'
+            path: tests/*Test.php
+        -
+            # not today
+            message: '#Parameter .+ expects .+, mixed given\.#'
+            path: tests/*Test.php
 
     symfony:
         container_xml_path: '%rootDir%/../../../var/cache/dev/App_KernelDevDebugContainer.xml'

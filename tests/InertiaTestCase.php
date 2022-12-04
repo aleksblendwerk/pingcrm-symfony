@@ -28,7 +28,7 @@ abstract class InertiaTestCase extends KernelTestCase
         $this->client = $client;
 
         /** @var User $user */
-        $user = JohnFromAcmeStory::load()->get('john')->object();
+        $user = JohnFromAcmeStory::load()::get('john')->object();
 
         $this->client->loginUser($user);
         $this->client->followRedirects();
@@ -47,8 +47,16 @@ abstract class InertiaTestCase extends KernelTestCase
 
         $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 
+        if (!is_array($data)) {
+            throw new \RuntimeException('Decoded response data is not an array.');
+        }
+
         if (!array_key_exists('props', $data)) {
             throw new \RuntimeException('Key "props" not found in response data.');
+        }
+
+        if (!is_array($data['props'])) {
+            throw new \RuntimeException('Value of "props" is not an array.');
         }
 
         return $data['props'];

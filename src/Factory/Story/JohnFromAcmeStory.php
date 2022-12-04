@@ -25,7 +25,7 @@ class JohnFromAcmeStory extends Story
                 'lastName' => 'Doe',
                 'email' => 'johndoe@example.com',
                 'owner' => true,
-                'account' => $this->get('acme')
+                'account' => $this::get('acme')
             ])
         );
     }

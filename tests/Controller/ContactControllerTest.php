@@ -15,9 +15,9 @@ class ContactControllerTest extends InertiaTestCase
 {
     public function testCanViewContacts(): void
     {
-        $a = JohnFromAcmeStory::acme();
+        $a = JohnFromAcmeStory::get('acme');
 
-        ContactFactory::new()->createMany(5, ['account' => $a]);
+        ContactFactory::new()::createMany(5, ['account' => $a]);
 
         $this->client->xmlHttpRequest('GET', '/contacts', [], [], ['HTTP_X-Inertia' => true]);
 
@@ -35,10 +35,10 @@ class ContactControllerTest extends InertiaTestCase
         ContactFactory::new()->create([
             'firstName' => 'Horst',
             'lastName' => 'Nacken',
-            'account' => JohnFromAcmeStory::load()->get('acme')
+            'account' => JohnFromAcmeStory::load()::get('acme')
         ]);
 
-        ContactFactory::new()->createMany(4, ['account' => JohnFromAcmeStory::load()->get('acme')]);
+        ContactFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
         $this->client->xmlHttpRequest('GET', '/contacts?search=Horst', [], [], ['HTTP_X-Inertia' => true]);
 
@@ -58,10 +58,10 @@ class ContactControllerTest extends InertiaTestCase
         ContactFactory::new()->create([
             'firstName' => 'Horst',
             'lastName' => 'Nacken',
-            'account' => JohnFromAcmeStory::load()->get('acme')
+            'account' => JohnFromAcmeStory::load()::get('acme')
         ])->remove();
 
-        ContactFactory::new()->createMany(4, ['account' => JohnFromAcmeStory::load()->get('acme')]);
+        ContactFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
         $this->client->xmlHttpRequest('GET', '/contacts', [], [], ['HTTP_X-Inertia' => true]);
 
@@ -79,10 +79,10 @@ class ContactControllerTest extends InertiaTestCase
         ContactFactory::new()->create([
             'firstName' => 'Horst',
             'lastName' => 'Nacken',
-            'account' => JohnFromAcmeStory::load()->get('acme')
+            'account' => JohnFromAcmeStory::load()::get('acme')
         ])->remove();
 
-        ContactFactory::new()->createMany(4, ['account' => JohnFromAcmeStory::load()->get('acme')]);
+        ContactFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
         $this->client->xmlHttpRequest('GET', '/contacts?trashed=with', [], [], ['HTTP_X-Inertia' => true]);
 
@@ -101,7 +101,7 @@ class ContactControllerTest extends InertiaTestCase
         /** @var Organization $organization */
         $organization = OrganizationFactory::new()->create([
             'name' => 'Some Big Fancy Company Name',
-            'account' => JohnFromAcmeStory::load()->get('acme')
+            'account' => JohnFromAcmeStory::load()::get('acme')
         ])->object();
 
         $contactData = [
@@ -183,7 +183,7 @@ class ContactControllerTest extends InertiaTestCase
 
     public function testCanEditAndUpdateContact(): void
     {
-        $contactProxy = ContactFactory::new()->create(['account' => JohnFromAcmeStory::load()->get('acme')]);
+        $contactProxy = ContactFactory::new()->create(['account' => JohnFromAcmeStory::load()::get('acme')]);
 
         /** @var Contact $contact */
         $contact = $contactProxy->object();
@@ -253,7 +253,7 @@ class ContactControllerTest extends InertiaTestCase
     public function testCanNotUpdateContactWithoutRequiredFields(): void
     {
         /** @var Contact $contact */
-        $contact = ContactFactory::new()->create(['account' => JohnFromAcmeStory::load()->get('acme')])->object();
+        $contact = ContactFactory::new()->create(['account' => JohnFromAcmeStory::load()::get('acme')])->object();
 
         $url = sprintf('/contacts/%d/edit', $contact->getId());
 
