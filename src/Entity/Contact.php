@@ -21,75 +21,69 @@ class Contact implements SoftDeletableInterface, TimestampableInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $id;
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[Assert\NotNull]
     #[Assert\Type('App\Entity\Account')]
-    #[ORM\ManyToOne(targetEntity: Account::class, inversedBy: 'contacts')]
+    #[ORM\ManyToOne(inversedBy: 'contacts')]
     #[ORM\JoinColumn(nullable: false)]
-    private Account $account;
+    private ?Account $account = null;
 
-    #[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'contacts')]
+    #[ORM\ManyToOne(inversedBy: 'contacts')]
     private ?Organization $organization = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 25)]
-    #[ORM\Column(type: 'string', length: 25)]
-    private string $firstName;
+    #[ORM\Column(length: 25)]
+    private ?string $firstName = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 25)]
-    #[ORM\Column(type: 'string', length: 25)]
-    private string $lastName;
+    #[ORM\Column(length: 25)]
+    private ?string $lastName = null;
 
     #[Assert\Length(max: 50)]
     #[Assert\Email]
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $email = null;
 
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $phone = null;
 
     #[Assert\Length(max: 150)]
-    #[ORM\Column(type: 'string', length: 150, nullable: true)]
+    #[ORM\Column(length: 150, nullable: true)]
     private ?string $address = null;
 
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $city = null;
 
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $region = null;
 
     #[Assert\Length(max: 2)]
-    #[ORM\Column(type: 'string', length: 2, nullable: true)]
+    #[ORM\Column(length: 2, nullable: true)]
     private ?string $country = null;
 
     #[Assert\Length(max: 25)]
-    #[ORM\Column(type: 'string', length: 25, nullable: true)]
+    #[ORM\Column(length: 25, nullable: true)]
     private ?string $postalCode = null;
 
     public function getId(): ?int
     {
-        return $this->id ?? null;
+        return $this->id;
     }
 
     public function getAccount(): ?Account
     {
-        return $this->account ?? null;
+        return $this->account;
     }
 
     public function setAccount(?Account $account): void
     {
-        if ($account === null) {
-            unset($this->account);
-
-            return;
-        }
-
         $this->account = $account;
     }
 
@@ -105,33 +99,21 @@ class Contact implements SoftDeletableInterface, TimestampableInterface
 
     public function getFirstName(): ?string
     {
-        return $this->firstName ?? null;
+        return $this->firstName;
     }
 
     public function setFirstName(?string $firstName): void
     {
-        if ($firstName === null) {
-            unset($this->firstName);
-
-            return;
-        }
-
         $this->firstName = $firstName;
     }
 
     public function getLastName(): ?string
     {
-        return $this->lastName ?? null;
+        return $this->lastName;
     }
 
     public function setLastName(?string $lastName): void
     {
-        if ($lastName === null) {
-            unset($this->lastName);
-
-            return;
-        }
-
         $this->lastName = $lastName;
     }
 

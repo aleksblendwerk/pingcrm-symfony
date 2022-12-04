@@ -19,28 +19,28 @@ class Account implements TimestampableInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $id;
+    #[ORM\Column]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 50)]
-    private string $name;
+    #[ORM\Column(length: 50)]
+    private ?string $name = null;
 
     /**
      * @var Collection<int, Organization>
      */
-    #[ORM\OneToMany(targetEntity: Organization::class, mappedBy: 'account')]
+    #[ORM\OneToMany(mappedBy: 'account', targetEntity: Organization::class)]
     private Collection $organizations;
 
     /**
      * @var Collection<int, Contact>
      */
-    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'account', orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'account', targetEntity: Contact::class, orphanRemoval: true)]
     private Collection $contacts;
 
     /**
      * @var Collection<int, User>
      */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'account')]
+    #[ORM\OneToMany(mappedBy: 'account', targetEntity: User::class)]
     private Collection $users;
 
     public function __construct()
@@ -52,15 +52,15 @@ class Account implements TimestampableInterface
 
     public function getId(): ?int
     {
-        return $this->id ?? null;
+        return $this->id;
     }
 
     public function getName(): ?string
     {
-        return $this->name ?? null;
+        return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }

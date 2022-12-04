@@ -32,41 +32,41 @@ class User implements
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $id;
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     #[Assert\Email]
-    #[ORM\Column(type: 'string', length: 50, unique: true)]
-    private string $email;
+    #[ORM\Column(length: 50, unique: true)]
+    private ?string $email = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 25)]
-    #[ORM\Column(type: 'string', length: 25)]
-    private string $firstName;
+    #[ORM\Column(length: 25)]
+    private ?string $firstName = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 25)]
-    #[ORM\Column(type: 'string', length: 25)]
-    private string $lastName;
+    #[ORM\Column(length: 25)]
+    private ?string $lastName = null;
 
     /**
      * The hashed password
      */
     #[Assert\NotBlank(normalizer: 'trim')]
-    #[ORM\Column(type: 'string')]
-    private string $password;
+    #[ORM\Column]
+    private ?string $password = null;
 
     #[Assert\NotNull]
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column]
     private bool $owner = false;
 
     #[Assert\Image(mimeTypes: ['image/jpeg', 'image/png'], minWidth: 1, minHeight: 1)]
     #[Vich\UploadableField(mapping: 'user_photo', fileNameProperty: 'photoFilename')]
     private ?File $photoFile = null;
 
-    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    #[ORM\Column(length: 100, nullable: true)]
     private ?string $photoFilename = null;
 
     /**
@@ -76,67 +76,49 @@ class User implements
     private array $roles = [];
 
     #[Assert\NotNull]
-    #[Assert\Type('App\Entity\Account')]
+    #[Assert\Type(Account::class)]
     #[ORM\ManyToOne(targetEntity: Account::class, inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
-    private Account $account;
+    private ?Account $account = null;
 
     public function getId(): ?int
     {
-        return $this->id ?? null;
+        return $this->id;
     }
 
     public function getEmail(): ?string
     {
-        return $this->email ?? null;
+        return $this->email;
     }
 
     public function setEmail(?string $email): void
     {
-        if ($email === null) {
-            unset($this->email);
-
-            return;
-        }
-
         $this->email = $email;
     }
 
     public function getFirstName(): ?string
     {
-        return $this->firstName ?? null;
+        return $this->firstName;
     }
 
     public function setFirstName(?string $firstName): void
     {
-        if ($firstName === null) {
-            unset($this->firstName);
-
-            return;
-        }
-
         $this->firstName = $firstName;
     }
 
     public function getLastName(): ?string
     {
-        return $this->lastName ?? null;
+        return $this->lastName;
     }
 
     public function setLastName(?string $lastName): void
     {
-        if ($lastName === null) {
-            unset($this->lastName);
-
-            return;
-        }
-
         $this->lastName = $lastName;
     }
 
     public function getName(): string
     {
-        return sprintf('%s %s', $this->getFirstName(), $this->getLastName());
+        return trim(sprintf('%s %s', $this->getFirstName(), $this->getLastName()));
     }
 
     /**
@@ -198,17 +180,11 @@ class User implements
 
     public function getPassword(): ?string
     {
-        return $this->password ?? null;
+        return $this->password;
     }
 
-    public function setPassword(?string $password): void
+    public function setPassword(string $password): void
     {
-        if ($password === null) {
-            unset($this->password);
-
-            return;
-        }
-
         $this->password = $password;
     }
 
@@ -225,33 +201,22 @@ class User implements
 
     public function getAccount(): ?Account
     {
-        return $this->account ?? null;
+        return $this->account;
     }
 
     public function setAccount(?Account $account): void
     {
-        if ($account === null) {
-            unset($this->account);
-
-            return;
-        }
-
         $this->account = $account;
     }
 
     /**
-     * A visual identifier that represents this user.
+     * Returns the identifier for this user (e.g. its username or email address).
      *
      * @see UserInterface
      */
-    public function getUsername(): string
-    {
-        return $this->getEmail() ?? 'Unknown User';
-    }
-
     public function getUserIdentifier(): string
     {
-        return $this->getUsername();
+        return $this->getEmail() ?? 'Unknown User';
     }
 
     /**
@@ -290,6 +255,6 @@ class User implements
 
     public function __toString(): string
     {
-        return $this->getUsername();
+        return $this->getUserIdentifier();
     }
 }

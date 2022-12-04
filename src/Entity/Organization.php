@@ -23,53 +23,53 @@ class Organization implements SoftDeletableInterface, TimestampableInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $id;
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[Assert\NotNull]
-    #[Assert\Type('App\Entity\Account')]
+    #[Assert\Type(Account::class)]
     #[ORM\ManyToOne(targetEntity: Account::class, inversedBy: 'organizations')]
     #[ORM\JoinColumn(nullable: false)]
-    private Account $account;
+    private ?Account $account = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 100)]
-    #[ORM\Column(type: 'string', length: 100)]
-    private string $name;
+    #[ORM\Column(length: 100)]
+    private ?string $name = null;
 
     #[Assert\Length(max: 50)]
     #[Assert\Email]
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $email = null;
 
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $phone = null;
 
     #[Assert\Length(max: 150)]
-    #[ORM\Column(type: 'string', length: 150, nullable: true)]
+    #[ORM\Column(length: 150, nullable: true)]
     private ?string $address = null;
 
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $city = null;
 
     #[Assert\Length(max: 50)]
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $region = null;
 
     #[Assert\Length(max: 2)]
-    #[ORM\Column(type: 'string', length: 2, nullable: true)]
+    #[ORM\Column(length: 2, nullable: true)]
     private ?string $country = null;
 
     #[Assert\Length(max: 25)]
-    #[ORM\Column(type: 'string', length: 25, nullable: true)]
+    #[ORM\Column(length: 25, nullable: true)]
     private ?string $postalCode = null;
 
     /**
      * @var Collection<int, Contact>
      */
-    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'organization')]
+    #[ORM\OneToMany(mappedBy: 'organization', targetEntity: Contact::class)]
     #[ORM\OrderBy(['lastName' => 'ASC', 'firstName' => 'ASC'])]
     private Collection $contacts;
 
@@ -80,38 +80,26 @@ class Organization implements SoftDeletableInterface, TimestampableInterface
 
     public function getId(): ?int
     {
-        return $this->id ?? null;
+        return $this->id;
     }
 
     public function getAccount(): ?Account
     {
-        return $this->account ?? null;
+        return $this->account;
     }
 
     public function setAccount(?Account $account): void
     {
-        if ($account === null) {
-            unset($this->account);
-
-            return;
-        }
-
         $this->account = $account;
     }
 
     public function getName(): ?string
     {
-        return $this->name ?? null;
+        return $this->name;
     }
 
     public function setName(?string $name): void
     {
-        if ($name === null) {
-            unset($this->name);
-
-            return;
-        }
-
         $this->name = $name;
     }
 
