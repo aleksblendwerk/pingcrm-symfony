@@ -28,7 +28,7 @@ trait BuildInertiaDefaultPropsTrait
                 $flashSuccessMessage = reset($flashSuccessMessages);
             }
 
-            if ($session->getFlashBag()->has('success')) {
+            if ($session->getFlashBag()->has('error')) {
                 $flashErrorMessages = $session->getFlashBag()->get('error');
                 $flashErrorMessage = reset($flashErrorMessages);
             }
