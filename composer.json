@@ -91,6 +91,12 @@
         "symfony/web-profiler-bundle": "^5.2"
     },
     "config": {
+        "allow-plugins": {
+            "symfony/flex": true,
+            "ergebnis/composer-normalize": true,
+            "phpstan/extension-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
         "optimize-autoloader": true,
         "sort-packages": true
     },
