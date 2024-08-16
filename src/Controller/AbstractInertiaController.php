@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Controller\Traits\BuildInertiaDefaultPropsTrait;
 use App\Entity\User;
-use Rompetomp\InertiaBundle\Service\InertiaInterface;
+use Rompetomp\InertiaBundle\Architecture\InertiaInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;

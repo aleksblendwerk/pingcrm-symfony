@@ -272,9 +272,6 @@
     "ramsey/uuid": {
         "version": "4.1.1"
     },
-    "rompetomp/inertia-bundle": {
-        "version": "1.1.0"
-    },
     "sebastian/cli-parser": {
         "version": "1.0.1"
     },
@@ -322,6 +319,18 @@
     },
     "sebastian/version": {
         "version": "3.0.2"
+    },
+    "skipthedragon/inertia-bundle": {
+        "version": "1.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "1a4b069057491f799e12a412810180eefd622fcf"
+        },
+        "files": [
+            "config/packages/inertia.yaml"
+        ]
     },
     "slevomat/coding-standard": {
         "version": "6.4.1"

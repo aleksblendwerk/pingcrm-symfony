@@ -24,7 +24,7 @@
         "gumlet/php-image-resize": "^2.0",
         "knplabs/doctrine-behaviors": "dev-sf7.0 as 2.6.3",
         "phpdocumentor/reflection-docblock": "^5.4",
-        "rompetomp/inertia-bundle": "^2.0",
+        "skipthedragon/inertia-bundle": "*",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "6.4.*",
         "symfony/console": "6.4.*",
@@ -52,8 +52,8 @@
         "symfony/yaml": "6.4.*",
         "twig/extra-bundle": "^3.0",
         "twig/twig": "^3.0",
-        "vich/uploader-bundle": "^1.15",
-        "zenstruck/foundry": "^1.4"
+        "vich/uploader-bundle": "^2.4.0",
+        "zenstruck/foundry": "^2.0.7"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
