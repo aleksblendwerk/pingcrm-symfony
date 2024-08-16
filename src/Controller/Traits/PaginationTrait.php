@@ -15,7 +15,7 @@ trait PaginationTrait
     protected function getPaginationLimitAndOffset(int $page, int $itemsPerPage = 10): array
     {
         $limit = $itemsPerPage;
-        $offset = --$page * 10;
+        $offset = --$page * $itemsPerPage;
 
         return [$limit, $offset];
     }
@@ -33,7 +33,8 @@ trait PaginationTrait
         array $data,
         int $totalCount,
         int $currentPage,
-        string $targetRoute
+        string $targetRoute,
+        int $itemsPerPage = 10
     ): array {
         $result = [];
 
@@ -48,7 +49,7 @@ trait PaginationTrait
             'active' => false
         ];
 
-        $maxPageNumber = $this->getPaginationMaxPageNumber($totalCount);
+        $maxPageNumber = $this->getPaginationMaxPageNumber($totalCount, $itemsPerPage);
 
         for ($i = 1; $i <= $maxPageNumber; $i++) {
             $result['links'][] = (object) [
