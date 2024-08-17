@@ -84,7 +84,7 @@ class OrganizationController extends BaseController
         methods: ['GET']
     )]
     #[Route(
-        path: '/organizations/create',
+        path: '/organizations',
         name: 'organizations_store',
         options: ['expose' => true],
         methods: ['POST']
@@ -116,14 +116,14 @@ class OrganizationController extends BaseController
         methods: ['GET']
     )]
     #[Route(
-        path: '/organizations/{id}/edit',
+        path: '/organizations/{id}',
         name: 'organizations_update',
         options: ['expose' => true],
-        methods: ['POST']
+        methods: ['PUT']
     )]
     public function edit(Request $request, Organization $organization): Response
     {
-        if ($request->getMethod() === 'POST') {
+        if ($request->getMethod() === 'PUT') {
             $errors = $this->handleFormData($request, $organization, 'Organization updated.');
 
             if (count($errors) === 0) {
@@ -199,7 +199,7 @@ class OrganizationController extends BaseController
     }
 
     #[Route(
-        path: '/organizations/{id}/destroy',
+        path: '/organizations/{id}',
         name: 'organizations_destroy',
         options: ['expose' => true],
         methods: ['DELETE']

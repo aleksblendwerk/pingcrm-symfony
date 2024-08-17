@@ -63,7 +63,7 @@ class UserController extends BaseController
     }
 
     #[Route(path: '/users/create', name: 'users_create', options: ['expose' => true], methods: ['GET'])]
-    #[Route(path: '/users/create', name: 'users_store', options: ['expose' => true], methods: ['POST'])]
+    #[Route(path: '/users', name: 'users_store', options: ['expose' => true], methods: ['POST'])]
     public function create(Request $request): Response
     {
         if ($request->getMethod() === 'POST') {
@@ -182,7 +182,7 @@ class UserController extends BaseController
         return $errors;
     }
 
-    #[Route(path: '/users/{id}/destroy', name: 'users_destroy', options: ['expose' => true], methods: ['DELETE'])]
+    #[Route(path: '/users/{id}', name: 'users_destroy', options: ['expose' => true], methods: ['DELETE'])]
     public function destroy(User $user): Response
     {
         $this->entityManager->remove($user);

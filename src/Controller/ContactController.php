@@ -88,7 +88,7 @@ class ContactController extends BaseController
         methods: ['GET']
     )]
     #[Route(
-        path: '/contacts/create',
+        path: '/contacts',
         name: 'contacts_store',
         options: ['expose' => true],
         methods: ['POST']
@@ -133,14 +133,14 @@ class ContactController extends BaseController
         methods: ['GET']
     )]
     #[Route(
-        path: '/contacts/{id}/edit',
+        path: '/contacts/{id}',
         name: 'contacts_update',
         options: ['expose' => true],
-        methods: ['POST']
+        methods: ['PUT']
     )]
     public function edit(Request $request, Contact $contact, OrganizationRepository $organizationRepository): Response
     {
-        if ($request->getMethod() === 'POST') {
+        if ($request->getMethod() === 'PUT') {
             $errors = $this->handleFormData($request, $contact, 'Contact updated.');
 
             if (count($errors) === 0) {
@@ -240,7 +240,7 @@ class ContactController extends BaseController
     }
 
     #[Route(
-        path: '/contacts/{id}/destroy',
+        path: '/contacts/{id}',
         name: 'contacts_destroy',
         options: ['expose' => true],
         methods: ['DELETE']

@@ -117,18 +117,6 @@
     "fakerphp/faker": {
         "version": "v1.12.0"
     },
-    "friendsofsymfony/jsrouting-bundle": {
-        "version": "2.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "2.3",
-            "ref": "a9f2e49180f75cdc71ae279a929c4b2e0638de84"
-        },
-        "files": [
-            "config/routes/fos_js_routing.yaml"
-        ]
-    },
     "fzaninotto/faker": {
         "version": "v1.9.1"
     },
@@ -770,9 +758,6 @@
     },
     "webmozart/assert": {
         "version": "1.9.1"
-    },
-    "willdurand/jsonp-callback-validator": {
-        "version": "v1.1.0"
     },
     "zenstruck/foundry": {
         "version": "v1.4.0"
