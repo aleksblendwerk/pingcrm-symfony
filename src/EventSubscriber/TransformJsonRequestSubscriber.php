@@ -34,7 +34,7 @@ class TransformJsonRequestSubscriber implements EventSubscriberInterface
         $content = $request->getContent();
 
         // @phpstan-ignore-next-line
-        if (!is_string($content) || $content === '' || $request->getContentType() !== 'json') {
+        if (!is_string($content) || $content === '' || $request->getContentTypeFormat() !== 'json') {
             return;
         }
 
