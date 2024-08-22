@@ -9,6 +9,7 @@ use App\Factory\Story\JohnFromAcmeStory;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -27,8 +28,11 @@ abstract class InertiaTestCase extends KernelTestCase
         $client = $kernel->getContainer()->get('test.client'); // @phpstan-ignore-line
         $this->client = $client;
 
+        /** @var Proxy<User> $userProxy */
+        $userProxy = JohnFromAcmeStory::get('john');
+
         /** @var User $user */
-        $user = JohnFromAcmeStory::get('john')->_real();
+        $user = $userProxy->_real();
 
         $this->client->loginUser($user);
         $this->client->followRedirects();
