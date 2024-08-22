@@ -28,7 +28,7 @@ abstract class InertiaTestCase extends KernelTestCase
         $this->client = $client;
 
         /** @var User $user */
-        $user = JohnFromAcmeStory::load()::get('john')->object();
+        $user = JohnFromAcmeStory::get('john')->_real();
 
         $this->client->loginUser($user);
         $this->client->followRedirects();

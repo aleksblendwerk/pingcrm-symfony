@@ -17,9 +17,13 @@ class ContactControllerTest extends InertiaTestCase
     {
         $a = JohnFromAcmeStory::get('acme');
 
-        ContactFactory::new()::createMany(5, ['account' => $a]);
+        ContactFactory::createMany(5, ['account' => $a]);
 
-        $this->client->xmlHttpRequest('GET', '/contacts', [], [], ['HTTP_X-Inertia' => true]);
+        $this->client->xmlHttpRequest(
+            method: 'GET',
+            uri: '/contacts',
+            server: ['HTTP_X-Inertia' => true]
+    );
 
         $response = $this->client->getResponse();
 
@@ -32,15 +36,19 @@ class ContactControllerTest extends InertiaTestCase
 
     public function testCanSearchForContacts(): void
     {
-        ContactFactory::new()->create([
+        ContactFactory::createOne([
             'firstName' => 'Horst',
             'lastName' => 'Nacken',
             'account' => JohnFromAcmeStory::load()::get('acme')
         ]);
 
-        ContactFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
+        ContactFactory::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
-        $this->client->xmlHttpRequest('GET', '/contacts?search=Horst', [], [], ['HTTP_X-Inertia' => true]);
+        $this->client->xmlHttpRequest(
+            method: 'GET',
+            uri: '/contacts?search=Horst',
+            server: ['HTTP_X-Inertia' => true]
+        );
 
         $response = $this->client->getResponse();
 
@@ -55,15 +63,16 @@ class ContactControllerTest extends InertiaTestCase
 
     public function testCanNotViewDeletedContacts(): void
     {
-        ContactFactory::new()->create([
-            'firstName' => 'Horst',
-            'lastName' => 'Nacken',
-            'account' => JohnFromAcmeStory::load()::get('acme')
-        ])->remove();
+        $contact = ContactFactory::createOne(['account' => JohnFromAcmeStory::load()::get('acme')]);
+        $contact->delete();
 
-        ContactFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
+        ContactFactory::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
-        $this->client->xmlHttpRequest('GET', '/contacts', [], [], ['HTTP_X-Inertia' => true]);
+        $this->client->xmlHttpRequest(
+            method: 'GET',
+            uri: '/contacts',
+            server: ['HTTP_X-Inertia' => true]
+        );
 
         $response = $this->client->getResponse();
 
@@ -76,15 +85,19 @@ class ContactControllerTest extends InertiaTestCase
 
     public function testCanFilterToViewDeletedContacts(): void
     {
-        ContactFactory::new()->create([
+        ContactFactory::createOne([
             'firstName' => 'Horst',
             'lastName' => 'Nacken',
             'account' => JohnFromAcmeStory::load()::get('acme')
-        ])->remove();
+        ]);
 
-        ContactFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
+        ContactFactory::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
-        $this->client->xmlHttpRequest('GET', '/contacts?trashed=with', [], [], ['HTTP_X-Inertia' => true]);
+        $this->client->xmlHttpRequest(
+            method: 'GET',
+            uri: '/contacts?trashed=with',
+            server: ['HTTP_X-Inertia' => true]
+        );
 
         $response = $this->client->getResponse();
 
@@ -99,10 +112,10 @@ class ContactControllerTest extends InertiaTestCase
     public function testCanCreateNewContact(): void
     {
         /** @var Organization $organization */
-        $organization = OrganizationFactory::new()->create([
+        $organization = OrganizationFactory::createOne([
             'name' => 'Some Big Fancy Company Name',
             'account' => JohnFromAcmeStory::load()::get('acme')
-        ])->object();
+        ]);
 
         $contactData = [
             'first_name' => 'Brandon',
@@ -118,12 +131,10 @@ class ContactControllerTest extends InertiaTestCase
         ];
 
         $this->client->xmlHttpRequest(
-            'POST',
-            '/contacts/create',
-            [],
-            [],
-            ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8'],
-            json_encode($contactData, JSON_THROW_ON_ERROR)
+            method: 'POST',
+            uri: '/contacts',
+            server: ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8'],
+            content: json_encode($contactData, JSON_THROW_ON_ERROR)
         );
 
         $response = $this->client->getResponse();
@@ -154,18 +165,15 @@ class ContactControllerTest extends InertiaTestCase
     public function testCanNotCreateContactWithoutRequiredFields(): void
     {
         $this->client->xmlHttpRequest(
-            'POST',
-            '/contacts/create',
-            [],
-            [],
-            ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8'],
-            null
+            method: 'POST',
+            uri: '/contacts',
+            server: ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8']
         );
 
         $response = $this->client->getResponse();
 
         self::assertTrue($response->isSuccessful());
-        self::assertSame('/contacts/create', $this->client->getRequest()->getRequestUri());
+        self::assertSame('/contacts', $this->client->getRequest()->getRequestUri());
 
         $props = self::getPropsFromResponse($response);
 
@@ -183,16 +191,18 @@ class ContactControllerTest extends InertiaTestCase
 
     public function testCanEditAndUpdateContact(): void
     {
-        $contactProxy = ContactFactory::new()->create(['account' => JohnFromAcmeStory::load()::get('acme')]);
+        $contact = ContactFactory::createOne(['account' => JohnFromAcmeStory::load()::get('acme')]);
 
-        /** @var Contact $contact */
-        $contact = $contactProxy->object();
-
-        $url = sprintf('/contacts/%d/edit', $contact->getId());
-
-        $this->client->xmlHttpRequest('GET', $url, [], [], ['HTTP_X-Inertia' => true]);
+        $this->client->xmlHttpRequest(
+            method: 'GET',
+            uri: sprintf('/contacts/%d/edit', $contact->getId()),
+            server: ['HTTP_X-Inertia' => true]
+        );
 
         $response = $this->client->getResponse();
+
+        // var_dump($response);
+        // var_dump($response->getContent());
 
         self::assertTrue($response->isSuccessful());
 
@@ -207,12 +217,10 @@ class ContactControllerTest extends InertiaTestCase
         $contactProps['email'] = 'test@example.com';
 
         $this->client->xmlHttpRequest(
-            'POST',
-            $url,
-            [],
-            [],
-            ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8'],
-            json_encode($contactProps, JSON_THROW_ON_ERROR)
+            method: 'PUT',
+            uri: sprintf('/contacts/%d', $contact->getId()),
+            server: ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8'],
+            content: json_encode($contactProps, JSON_THROW_ON_ERROR)
         );
 
         $response = $this->client->getResponse();
@@ -225,10 +233,39 @@ class ContactControllerTest extends InertiaTestCase
         self::assertArrayHasKey('success', $props['flash']);
         self::assertSame('Contact updated.', $props['flash']['success']);
 
-        /** @var Contact $contact */
-        $contact = $contactProxy->refresh()->object(); // get the refreshed entity
+        self::assertContactPropsAndObjectContentsSame($contactProps, $contact->_refresh());
+    }
 
-        self::assertContactPropsAndObjectContentsSame($contactProps, $contact);
+    public function testCanNotUpdateContactWithoutRequiredFields(): void
+    {
+        /** @var Contact $contact */
+        $contact = ContactFactory::createOne(['account' => JohnFromAcmeStory::load()::get('acme')]);
+
+        $url = sprintf('/contacts/%d', $contact->getId());
+
+        $this->client->xmlHttpRequest(
+            method: 'PUT',
+            uri: $url,
+            server: ['HTTP_X-Inertia' => true]
+        );
+
+        $response = $this->client->getResponse();
+
+        self::assertTrue($response->isSuccessful());
+        self::assertSame($url, $this->client->getRequest()->getRequestUri());
+
+        $props = self::getPropsFromResponse($response);
+
+        self::assertCount(2, $props['errors']);
+        self::assertArrayHasKey('first_name', $props['errors']);
+        self::assertArrayHasKey('last_name', $props['errors']);
+        self::assertSame(
+            [
+                'first_name' => 'This value should not be blank.',
+                'last_name' => 'This value should not be blank.'
+            ],
+            $props['errors']
+        );
     }
 
     /**
@@ -248,33 +285,5 @@ class ContactControllerTest extends InertiaTestCase
         self::assertSame($contact->getCountry(), $contactProps['country']);
         self::assertSame($contact->getPostalCode(), $contactProps['postal_code']);
         self::assertNull($contactProps['deleted_at']);
-    }
-
-    public function testCanNotUpdateContactWithoutRequiredFields(): void
-    {
-        /** @var Contact $contact */
-        $contact = ContactFactory::new()->create(['account' => JohnFromAcmeStory::load()::get('acme')])->object();
-
-        $url = sprintf('/contacts/%d/edit', $contact->getId());
-
-        $this->client->xmlHttpRequest('POST', $url, [], [], ['HTTP_X-Inertia' => true]);
-
-        $response = $this->client->getResponse();
-
-        self::assertTrue($response->isSuccessful());
-        self::assertSame($url, $this->client->getRequest()->getRequestUri());
-
-        $props = self::getPropsFromResponse($response);
-
-        self::assertCount(2, $props['errors']);
-        self::assertArrayHasKey('first_name', $props['errors']);
-        self::assertArrayHasKey('last_name', $props['errors']);
-        self::assertSame(
-            [
-                'first_name' => 'This value should not be blank.',
-                'last_name' => 'This value should not be blank.'
-            ],
-            $props['errors']
-        );
     }
 }

@@ -16,9 +16,9 @@ class JohnFromAcmeStory extends Story
 {
     public function build(): void
     {
-        $this->add('acme', AccountFactory::new()->create(['name' => 'Acme Corporation']));
+        $this->addState('acme', AccountFactory::new()->create(['name' => 'Acme Corporation']));
 
-        $this->add(
+        $this->addState(
             'john',
             UserFactory::new()->create([
                 'firstName' => 'John',

@@ -36,11 +36,15 @@ class AppFixtures extends Fixture
 
         OrganizationFactory::new()::createMany(100, ['account' => $account]);
 
-        ContactFactory::new()
-            ->withAttributes(static function (): array {
-                return ['organization' => OrganizationFactory::random()];
-            })
-            ::createMany(100, ['account' => $account]);
+        ContactFactory::createMany(
+            100,
+            function() use ($account) {
+                return [
+                    'account' => $account,
+                    'organization' => OrganizationFactory::random()
+                ];
+            }
+        );
 
         $manager->flush();
     }

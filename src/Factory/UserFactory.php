@@ -6,29 +6,19 @@ namespace App\Factory;
 
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Zenstruck\Foundry\ModelFactory;
+use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends ModelFactory<User>
+ * @extends PersistentProxyObjectFactory<User>
  */
-class UserFactory extends ModelFactory
+class UserFactory extends PersistentProxyObjectFactory
 {
-    /**
-     * @var array<string, string>
-     */
-    protected array $knownPasswordHashes = [
-        'secret' => '$argon2id$v=19$m=65536,t=4,p=1$ux1PEx9u0ynZ5KJG7k4xwA$0yBw3YwKSkI9nxr/djTS9FN86q1vveCM+vNUJBS8nFw'
-    ];
-
     public function __construct(private UserPasswordHasherInterface $userPasswordHasher)
     {
         parent::__construct();
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    protected function getDefaults(): array
+    protected function defaults(): array|callable
     {
         return [
             'firstName' => self::faker()->firstName(),
@@ -39,19 +29,10 @@ class UserFactory extends ModelFactory
         ];
     }
 
-    /**
-     * @return static
-     */
-    protected function initialize(): self
+    protected function initialize(): static
     {
         return $this->afterInstantiate(function (User $user): void {
             if ($user->getPassword() === null) {
-                return;
-            }
-
-            if (array_key_exists($user->getPassword(), $this->knownPasswordHashes)) {
-                $user->setPassword($this->knownPasswordHashes[$user->getPassword()]);
-
                 return;
             }
 
@@ -59,7 +40,7 @@ class UserFactory extends ModelFactory
         });
     }
 
-    protected static function getClass(): string
+    public static function class(): string
     {
         return User::class;
     }

@@ -5,24 +5,21 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Entity\Account;
-use Zenstruck\Foundry\ModelFactory;
+use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends ModelFactory<Account>
+ * @extends PersistentProxyObjectFactory<Account>
  */
-class AccountFactory extends ModelFactory
+class AccountFactory extends PersistentProxyObjectFactory
 {
-    /**
-     * @return array<string, mixed>
-     */
-    protected function getDefaults(): array
+    protected function defaults(): array|callable
     {
         return [
             'name' => self::faker()->company()
         ];
     }
 
-    protected static function getClass(): string
+    public static function class(): string
     {
         return Account::class;
     }

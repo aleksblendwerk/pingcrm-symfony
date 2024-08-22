@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Entity\Contact;
-use Zenstruck\Foundry\ModelFactory;
+use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends ModelFactory<Contact>
+ * @extends PersistentProxyObjectFactory<Contact>
  */
-class ContactFactory extends ModelFactory
+class ContactFactory extends PersistentProxyObjectFactory
 {
-    /**
-     * @return array<string, mixed>
-     */
-    protected function getDefaults(): array
+    protected function defaults(): array|callable
     {
         return [
             'firstName' => self::faker()->firstName(),
@@ -30,7 +27,7 @@ class ContactFactory extends ModelFactory
         ];
     }
 
-    protected static function getClass(): string
+    public static function class(): string
     {
         return Contact::class;
     }

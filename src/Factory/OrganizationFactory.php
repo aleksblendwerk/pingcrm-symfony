@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Entity\Organization;
-use Zenstruck\Foundry\ModelFactory;
+use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends ModelFactory<Organization>
+ * @extends PersistentProxyObjectFactory<Organization>
  */
-class OrganizationFactory extends ModelFactory
+class OrganizationFactory extends PersistentProxyObjectFactory
 {
-    /**
-     * @return array<string, mixed>
-     */
-    protected function getDefaults(): array
+    protected function defaults(): array|callable
     {
         return [
             'name' => self::faker()->company(),
@@ -29,7 +26,7 @@ class OrganizationFactory extends ModelFactory
         ];
     }
 
-    protected static function getClass(): string
+    public static function class(): string
     {
         return Organization::class;
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Entity\Organization;
+use App\Factory\ContactFactory;
 use App\Factory\OrganizationFactory;
 use App\Factory\Story\JohnFromAcmeStory;
 use App\Tests\InertiaTestCase;
@@ -13,9 +14,13 @@ class OrganizationControllerTest extends InertiaTestCase
 {
     public function testCanViewOrganizations(): void
     {
-        OrganizationFactory::new()::createMany(5, ['account' => JohnFromAcmeStory::load()::get('acme')]);
+        OrganizationFactory::createMany(5, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
-        $this->client->xmlHttpRequest('GET', '/organizations', [], [], ['HTTP_X-Inertia' => true]);
+        $this->client->xmlHttpRequest(
+            method: 'GET',
+            uri: '/organizations',
+            server: ['HTTP_X-Inertia' => true]
+        );
 
         $response = $this->client->getResponse();
 
@@ -28,19 +33,17 @@ class OrganizationControllerTest extends InertiaTestCase
 
     public function testCanSearchForOrganizations(): void
     {
-        OrganizationFactory::new()->create([
+        OrganizationFactory::createOne([
             'name' => 'Some Big Fancy Company Name',
             'account' => JohnFromAcmeStory::load()::get('acme')
         ]);
 
-        OrganizationFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
+        OrganizationFactory::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
         $this->client->xmlHttpRequest(
-            'GET',
-            '/organizations?search=Some Big Fancy Company Name',
-            [],
-            [],
-            ['HTTP_X-Inertia' => true]
+            method: 'GET',
+            uri: '/organizations?search=Some Big Fancy Company Name',
+            server: ['HTTP_X-Inertia' => true]
         );
 
         $response = $this->client->getResponse();
@@ -56,14 +59,16 @@ class OrganizationControllerTest extends InertiaTestCase
 
     public function testCanNotViewDeletedOrganizations(): void
     {
-        OrganizationFactory::new()->create([
-            'name' => 'Some Big Fancy Company Name',
-            'account' => JohnFromAcmeStory::load()::get('acme')
-        ])->remove();
+        $organization = OrganizationFactory::createOne(['account' => JohnFromAcmeStory::load()::get('acme')]);
+        $organization->delete();
 
-        OrganizationFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
+        OrganizationFactory::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
-        $this->client->xmlHttpRequest('GET', '/organizations', [], [], ['HTTP_X-Inertia' => true]);
+        $this->client->xmlHttpRequest(
+            method: 'GET',
+            uri: '/organizations',
+            server: ['HTTP_X-Inertia' => true]
+        );
 
         $response = $this->client->getResponse();
 
@@ -76,14 +81,18 @@ class OrganizationControllerTest extends InertiaTestCase
 
     public function testCanFilterToViewDeletedOrganizations(): void
     {
-        OrganizationFactory::new()->create([
+        OrganizationFactory::createOne([
            'name' => 'Some Big Fancy Company Name',
            'account' => JohnFromAcmeStory::load()::get('acme')
-        ])->remove();
+        ]);
 
-        OrganizationFactory::new()::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
+        OrganizationFactory::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 
-        $this->client->xmlHttpRequest('GET', '/organizations?trashed=with', [], [], ['HTTP_X-Inertia' => true]);
+        $this->client->xmlHttpRequest(
+            method: 'GET',
+            uri: '/organizations?trashed=with',
+            server: ['HTTP_X-Inertia' => true]
+        );
 
         $response = $this->client->getResponse();
 
@@ -109,12 +118,10 @@ class OrganizationControllerTest extends InertiaTestCase
         ];
 
         $this->client->xmlHttpRequest(
-            'POST',
-            '/organizations/create',
-            [],
-            [],
-            ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8'],
-            json_encode($organizationData, JSON_THROW_ON_ERROR)
+            method: 'POST',
+            uri: '/organizations',
+            server: ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8'],
+            content: json_encode($organizationData, JSON_THROW_ON_ERROR)
         );
 
         $response = $this->client->getResponse();
@@ -143,18 +150,15 @@ class OrganizationControllerTest extends InertiaTestCase
     public function testCanNotCreateOrganizationWithoutRequiredFields(): void
     {
         $this->client->xmlHttpRequest(
-            'POST',
-            '/organizations/create',
-            [],
-            [],
-            ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8'],
-            null
+            method: 'POST',
+            uri: '/organizations',
+            server: ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8']
         );
 
         $response = $this->client->getResponse();
 
         self::assertTrue($response->isSuccessful());
-        self::assertSame('/organizations/create', $this->client->getRequest()->getRequestUri());
+        self::assertSame('/organizations', $this->client->getRequest()->getRequestUri());
 
         $props = self::getPropsFromResponse($response);
 
@@ -165,14 +169,13 @@ class OrganizationControllerTest extends InertiaTestCase
 
     public function testCanEditAndUpdateOrganization(): void
     {
-        $organizationProxy = OrganizationFactory::new()->create(['account' => JohnFromAcmeStory::load()::get('acme')]);
+        $organization = OrganizationFactory::createOne(['account' => JohnFromAcmeStory::load()::get('acme')]);
 
-        /** @var Organization $organization */
-        $organization = $organizationProxy->object();
-
-        $url = sprintf('/organizations/%d/edit', $organization->getId());
-
-        $this->client->xmlHttpRequest('GET', $url, [], [], ['HTTP_X-Inertia' => true]);
+        $this->client->xmlHttpRequest(
+            method: 'GET',
+            uri: sprintf('/organizations/%d/edit', $organization->getId()),
+            server: ['HTTP_X-Inertia' => true]
+        );
 
         $response = $this->client->getResponse();
 
@@ -189,12 +192,10 @@ class OrganizationControllerTest extends InertiaTestCase
         $organizationProps['email'] = 'test@example.com';
 
         $this->client->xmlHttpRequest(
-            'POST',
-            $url,
-            [],
-            [],
-            ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8'],
-            json_encode($organizationProps, JSON_THROW_ON_ERROR)
+            method: 'PUT',
+            uri: sprintf('/organizations/%d', $organization->getId()),
+            server: ['HTTP_X-Inertia' => true, 'CONTENT_TYPE' => 'application/json;charset=UTF-8'],
+            content: json_encode($organizationProps, JSON_THROW_ON_ERROR)
         );
 
         $response = $this->client->getResponse();
@@ -207,10 +208,32 @@ class OrganizationControllerTest extends InertiaTestCase
         self::assertArrayHasKey('success', $props['flash']);
         self::assertSame('Organization updated.', $props['flash']['success']);
 
-        /** @var Organization $organization */
-        $organization = $organizationProxy->refresh()->object(); // get the refreshed entity
+        self::assertOrganizationPropsAndObjectContentsSame($organizationProps, $organization->_refresh());
+    }
 
-        self::assertOrganizationPropsAndObjectContentsSame($organizationProps, $organization);
+    public function testCanNotUpdateOrganizationWithoutRequiredFields(): void
+    {
+        /** @var Organization $organization */
+        $organization = OrganizationFactory::createOne(['account' => JohnFromAcmeStory::load()::get('acme')]);
+
+        $url = sprintf('/organizations/%d', $organization->getId());
+
+        $this->client->xmlHttpRequest(
+            method: 'PUT',
+            uri: $url,
+            server: ['HTTP_X-Inertia' => true]
+        );
+
+        $response = $this->client->getResponse();
+
+        self::assertTrue($response->isSuccessful());
+        self::assertSame($url, $this->client->getRequest()->getRequestUri());
+
+        $props = self::getPropsFromResponse($response);
+
+        self::assertCount(1, $props['errors']);
+        self::assertArrayHasKey('name', $props['errors']);
+        self::assertSame(['name' => 'This value should not be blank.'], $props['errors']);
     }
 
     /**
@@ -231,28 +254,5 @@ class OrganizationControllerTest extends InertiaTestCase
         self::assertSame($organization->getPostalCode(), $organizationProps['postal_code']);
         self::assertNull($organizationProps['deleted_at']);
         self::assertCount(0, $organizationProps['contacts']);
-    }
-
-    public function testCanNotUpdateOrganizationWithoutRequiredFields(): void
-    {
-        /** @var Organization $organization */
-        $organization = OrganizationFactory::new()
-            ->create(['account' => JohnFromAcmeStory::load()::get('acme')])
-            ->object();
-
-        $url = sprintf('/organizations/%d/edit', $organization->getId());
-
-        $this->client->xmlHttpRequest('POST', $url, [], [], ['HTTP_X-Inertia' => true]);
-
-        $response = $this->client->getResponse();
-
-        self::assertTrue($response->isSuccessful());
-        self::assertSame($url, $this->client->getRequest()->getRequestUri());
-
-        $props = self::getPropsFromResponse($response);
-
-        self::assertCount(1, $props['errors']);
-        self::assertArrayHasKey('name', $props['errors']);
-        self::assertSame(['name' => 'This value should not be blank.'], $props['errors']);
     }
 }
