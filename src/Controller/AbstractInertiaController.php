@@ -21,9 +21,7 @@ abstract class AbstractInertiaController extends AbstractController
 
     protected ValidatorInterface $validator;
 
-    public function __construct(protected RequestStack $requestStack)
-    {
-    }
+    public function __construct(protected RequestStack $requestStack) {}
 
     #[Required]
     public function setInertia(InertiaInterface $inertia): void

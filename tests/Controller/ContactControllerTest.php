@@ -23,7 +23,7 @@ class ContactControllerTest extends InertiaTestCase
             method: 'GET',
             uri: '/contacts',
             server: ['HTTP_X-Inertia' => true]
-    );
+        );
 
         $response = $this->client->getResponse();
 

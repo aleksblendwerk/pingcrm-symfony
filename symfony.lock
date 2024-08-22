@@ -8,9 +8,6 @@
     "composer/package-versions-deprecated": {
         "version": "1.11.99"
     },
-    "dealerdirect/phpcodesniffer-composer-installer": {
-        "version": "v0.7.0"
-    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -116,6 +113,18 @@
     },
     "fakerphp/faker": {
         "version": "v1.12.0"
+    },
+    "friendsofphp/php-cs-fixer": {
+        "version": "3.62",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "be2103eb4a20942e28a6dd87736669b757132435"
+        },
+        "files": [
+            ".php-cs-fixer.dist.php"
+        ]
     },
     "fzaninotto/faker": {
         "version": "v1.9.1"
@@ -318,21 +327,6 @@
         },
         "files": [
             "config/packages/inertia.yaml"
-        ]
-    },
-    "slevomat/coding-standard": {
-        "version": "6.4.1"
-    },
-    "squizlabs/php_codesniffer": {
-        "version": "3.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.0",
-            "ref": "0dc9cceda799fd3a08b96987e176a261028a3709"
-        },
-        "files": [
-            "phpcs.xml.dist"
         ]
     },
     "stof/doctrine-extensions-bundle": {

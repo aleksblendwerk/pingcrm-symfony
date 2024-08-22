@@ -38,7 +38,7 @@ class AppFixtures extends Fixture
 
         ContactFactory::createMany(
             100,
-            function() use ($account) {
+            function () use ($account) {
                 return [
                     'account' => $account,
                     'organization' => OrganizationFactory::random()

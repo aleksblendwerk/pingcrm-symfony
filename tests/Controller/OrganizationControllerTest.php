@@ -82,8 +82,8 @@ class OrganizationControllerTest extends InertiaTestCase
     public function testCanFilterToViewDeletedOrganizations(): void
     {
         OrganizationFactory::createOne([
-           'name' => 'Some Big Fancy Company Name',
-           'account' => JohnFromAcmeStory::load()::get('acme')
+            'name' => 'Some Big Fancy Company Name',
+            'account' => JohnFromAcmeStory::load()::get('acme')
         ]);
 
         OrganizationFactory::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);

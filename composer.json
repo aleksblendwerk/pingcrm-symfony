@@ -55,8 +55,8 @@
         "zenstruck/foundry": "^2.0.7"
     },
     "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "ergebnis/composer-normalize": "^2.8",
+        "friendsofphp/php-cs-fixer": "^3.62",
         "php-parallel-lint/php-console-highlighter": "^0.5.0",
         "php-parallel-lint/php-parallel-lint": "^1.0",
         "phpstan/extension-installer": "^1.0",
@@ -66,8 +66,6 @@
         "phpstan/phpstan-symfony": "^1.2",
         "phpunit/phpunit": "^9.5",
         "rector/rector": "^0.14.0",
-        "slevomat/coding-standard": "^8.4",
-        "squizlabs/php_codesniffer": "^3.5",
         "symfony/browser-kit": "^6.4",
         "symfony/css-selector": "^6.4",
         "symfony/debug-bundle": "^6.4",
@@ -103,8 +101,7 @@
         "allow-plugins": {
             "symfony/flex": true,
             "ergebnis/composer-normalize": true,
-            "phpstan/extension-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "phpstan/extension-installer": true
         },
         "optimize-autoloader": true,
         "sort-packages": true
@@ -143,18 +140,18 @@
         ],
         "lint": "vendor/bin/parallel-lint --colors --exclude var --exclude vendor .",
         "phpcbf": "vendor/bin/phpcbf",
-        "phpcs": "vendor/bin/phpcs --colors",
+        "php-cs-fixer-check": "vendor/bin/php-cs-fixer check --ansi --diff --using-cache=no -vvv",
+        "php cs-fixer-fix": "vendor/bin/php-cs-fixer fix --ansi --diff --using-cache=no -vvv",
         "phpstan": "vendor/bin/phpstan analyse --ansi",
         "phpunit": "vendor/bin/phpunit --colors=always",
         "qa": [
             "symfony console cache:clear --env=dev",
-            "@composer normalize --ansi --dry-run",
             "symfony console lint:twig templates --ansi",
             "symfony console lint:yaml config --ansi",
             "symfony console lint:container --ansi",
             "symfony console doctrine:schema:validate --ansi",
             "@lint",
-            "@phpcs",
+            "@php-cs-fixer-check",
             "@phpstan"
         ],
         "test": [

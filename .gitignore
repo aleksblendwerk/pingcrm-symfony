@@ -11,11 +11,6 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-###> squizlabs/php_codesniffer ###
-/.phpcs-cache
-###< squizlabs/php_codesniffer ###
-
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
@@ -27,3 +22,8 @@ yarn-error.log
 .phpunit
 .phpunit.result.cache
 ###< symfony/phpunit-bridge ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
