@@ -141,7 +141,6 @@
             "symfony console doctrine:schema:update --ansi --env=test --force --no-interaction"
         ],
         "lint": "vendor/bin/parallel-lint --colors --exclude var --exclude vendor .",
-        "phpcbf": "vendor/bin/phpcbf",
         "php-cs-fixer-check": "vendor/bin/php-cs-fixer check --ansi --diff --using-cache=no -vvv",
         "php cs-fixer-fix": "vendor/bin/php-cs-fixer fix --ansi --diff --using-cache=no -vvv",
         "phpstan": "vendor/bin/phpstan analyse --ansi",
