@@ -1,5 +1,5 @@
 inertia:
-    root_view: 'app.html.twig'
+    root_view: 'base.html.twig'
     csrf:
         enabled: false
     ssr:

@@ -1,39 +1,34 @@
 {
     "private": true,
     "type": "module",
-    "license": "UNLICENSED",
+    "scripts": {
+        "fix:eslint": "eslint --ext .js,.vue assets/js/ --fix",
+        "fix:prettier": "prettier --write --loglevel warn 'assets/js/**/*.vue'",
+        "fix-code-style": "npm run fix:prettier && npm run fix:eslint",
+        "heroku-postbuild": "npm run build",
+        "dev": "vite",
+        "build": "vite build"
+    },
     "devDependencies": {
-        "@babel/core": "^7.17.0",
-        "@babel/preset-env": "^7.16.0",
         "@inertiajs/vue3": "^1.0.15",
         "@popperjs/core": "^2.11.0",
-        "@symfony/webpack-encore": "^4.0.0",
+        "@vitejs/plugin-vue": "^5.0.4",
         "@vue/server-renderer": "^3.2.27",
         "autoprefixer": "^10.4.19",
-        "core-js": "^3.23.0",
         "eslint": "^8.4.1",
         "eslint-plugin-vue": "^8.2.0",
-        "husky": "^4.3.0",
         "lodash": "^4.17.21",
         "postcss": "^8.4.38",
         "postcss-import": "^16.1.0",
         "prettier": "^2.5.1",
         "prettier-plugin-tailwind": "^2.2.12",
-        "regenerator-runtime": "^0.13.9",
         "tailwindcss": "^3.4.3",
         "uuid": "^8.3.2",
-        "vue": "^3.2.27",
-        "webpack": "^5.74.0",
-        "webpack-cli": "^4.10.0",
-        "webpack-notifier": "^1.15.0"
+        "vite": "^5.2.7",
+        "vue": "^3.2.27"
     },
-    "scripts": {
-        "dev-server": "encore dev-server",
-        "dev": "encore dev",
-        "watch": "encore dev --watch",
-        "build": "encore production --progress",
-        "fix:eslint": "eslint --ext .js,.vue assets/js/ --fix",
-        "fix:prettier": "prettier --write --loglevel warn 'assets/js/**/*.vue'",
-        "fix-code-style": "npm run fix:prettier && npm run fix:eslint"
+    "dependencies": {
+        "url": "^0.11.4",
+        "vite-plugin-symfony": "^7.0.4"
     }
 }

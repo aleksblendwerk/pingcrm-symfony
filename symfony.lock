@@ -171,6 +171,15 @@
     "ocramius/proxy-manager": {
         "version": "2.8.0"
     },
+    "pentatrion/vite-bundle": {
+        "version": "7.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "6.5",
+            "ref": "3a6673f248f8fc1dd364dadfef4c5b381d1efab6"
+        }
+    },
     "phar-io/manifest": {
         "version": "2.0.1"
     },
@@ -702,25 +711,6 @@
             "config/packages/dev/web_profiler.yaml",
             "config/packages/test/web_profiler.yaml",
             "config/routes/dev/web_profiler.yaml"
-        ]
-    },
-    "symfony/webpack-encore-bundle": {
-        "version": "1.6",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.6",
-            "ref": "69e1d805ad95964088bd510c05995e87dc391564"
-        },
-        "files": [
-            "assets/app.js",
-            "assets/styles/app.css",
-            "config/packages/assets.yaml",
-            "config/packages/prod/webpack_encore.yaml",
-            "config/packages/test/webpack_encore.yaml",
-            "config/packages/webpack_encore.yaml",
-            "package.json",
-            "webpack.config.js"
         ]
     },
     "symfony/yaml": {
