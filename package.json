@@ -20,15 +20,13 @@
         "lodash": "^4.17.21",
         "postcss": "^8.4.38",
         "postcss-import": "^16.1.0",
-        "prettier": "^2.5.1",
-        "prettier-plugin-tailwind": "^2.2.12",
+        "prettier": "^3.3.3",
+        "prettier-plugin-tailwindcss": "^0.6.6",
         "tailwindcss": "^3.4.3",
+        "url": "^0.11.4",
         "uuid": "^8.3.2",
         "vite": "^5.2.7",
+        "vite-plugin-symfony": "^7.0.4",
         "vue": "^3.2.27"
-    },
-    "dependencies": {
-        "url": "^0.11.4",
-        "vite-plugin-symfony": "^7.0.4"
     }
 }
