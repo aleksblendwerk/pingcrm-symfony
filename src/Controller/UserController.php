@@ -112,7 +112,7 @@ class UserController extends BaseController
          * edge case: when editing the currently logged in user and there were errors,
          * we need to assure we reload a valid state here, otherwise this will mess up the authentication system
          */
-        if ($request->getMethod() === 'PUT' && $user === $this->getUser()) {
+        if ($request->getMethod() === 'POST' && $user === $this->getUser()) {
             $this->entityManager->refresh($user);
         }
 
@@ -132,8 +132,11 @@ class UserController extends BaseController
         $user->setEmail(RequestHelper::stringOrNull($request->request, 'email'));
         $user->setOwner($request->request->getBoolean('owner'));
 
-        if (RequestHelper::stringOrNull($request->request, 'password') !== null) {
-            $password = RequestHelper::stringOrNull($request->request, 'password');
+        if (
+            RequestHelper::stringOrNull($request->request, 'password') !== null &&
+            trim($request->request->getString('password')) !== ''
+        ) {
+            $password = $request->request->getString('password');
 
             $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
         }
