@@ -31,7 +31,7 @@ jobs:
 
         steps:
             -   name: Checkout
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
@@ -41,17 +41,17 @@ jobs:
                     tools: symfony
 
             -   name: Setup Node.js
-                uses: actions/setup-node@v3
+                uses: actions/setup-node@v4
                 with:
-                    node-version: '14'
+                    node-version: '20'
 
             -   name: Install dependencies
                 run: |
                     composer install --ansi --no-progress
-                    yarn install --no-progress
+                    npm ci
 
             -   name: Build assets
-                run: yarn encore production
+                run: npm run build
 
             -   name: QA
                 run: |
