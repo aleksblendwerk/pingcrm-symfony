@@ -64,7 +64,7 @@ class ContactControllerTest extends InertiaTestCase
     public function testCanNotViewDeletedContacts(): void
     {
         $contact = ContactFactory::createOne(['account' => JohnFromAcmeStory::load()::get('acme')]);
-        $contact->delete();
+        $contact->_delete();
 
         ContactFactory::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 

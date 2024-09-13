@@ -6,19 +6,14 @@ namespace App\Entity;
 
 use App\Repository\ContactRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
-use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
-use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
-use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 #[ORM\Table(name: 'contacts')]
-class Contact implements SoftDeletableInterface, TimestampableInterface
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
+class Contact
 {
-    use SoftDeletableTrait;
-    use TimestampableTrait;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -71,6 +66,17 @@ class Contact implements SoftDeletableInterface, TimestampableInterface
     #[Assert\Length(max: 25)]
     #[ORM\Column(length: 25, nullable: true)]
     private ?string $postalCode = null;
+
+    #[ORM\Column]
+    #[Gedmo\Timestampable]
+    private ?\DateTime $createdAt = null;
+
+    #[ORM\Column]
+    #[Gedmo\Timestampable]
+    private ?\DateTime $updatedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $deletedAt = null;
 
     public function getId(): ?int
     {
@@ -190,5 +196,36 @@ class Contact implements SoftDeletableInterface, TimestampableInterface
     public function setPostalCode(?string $postalCode): void
     {
         $this->postalCode = $postalCode;
+    }
+
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTime $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTime $deletedAt): void
+    {
+        $this->deletedAt = $deletedAt;
     }
 }

@@ -6,10 +6,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
-use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
-use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
-use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -21,15 +18,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'users')]
 #[Vich\Uploadable]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class User implements
     PasswordAuthenticatedUserInterface,
-    SoftDeletableInterface,
-    TimestampableInterface,
     UserInterface
 {
-    use SoftDeletableTrait;
-    use TimestampableTrait;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -74,6 +67,17 @@ class User implements
      */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
+
+    #[ORM\Column]
+    #[Gedmo\Timestampable]
+    private ?\DateTime $createdAt = null;
+
+    #[ORM\Column]
+    #[Gedmo\Timestampable]
+    private ?\DateTime $updatedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $deletedAt = null;
 
     #[Assert\NotNull]
     #[Assert\Type(Account::class)]
@@ -176,6 +180,36 @@ class User implements
     public function setPhotoFilename(?string $photoFilename): void
     {
         $this->photoFilename = $photoFilename;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTime $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTime $deletedAt): void
+    {
+        $this->deletedAt = $deletedAt;
     }
 
     public function getPassword(): ?string

@@ -60,7 +60,7 @@ class OrganizationControllerTest extends InertiaTestCase
     public function testCanNotViewDeletedOrganizations(): void
     {
         $organization = OrganizationFactory::createOne(['account' => JohnFromAcmeStory::load()::get('acme')]);
-        $organization->delete();
+        $organization->_delete();
 
         OrganizationFactory::createMany(4, ['account' => JohnFromAcmeStory::load()::get('acme')]);
 

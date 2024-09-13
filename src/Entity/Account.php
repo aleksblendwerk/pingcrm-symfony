@@ -8,15 +8,12 @@ use App\Repository\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
-use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
 #[ORM\Table(name: 'accounts')]
-class Account implements TimestampableInterface
+class Account
 {
-    use TimestampableTrait;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -24,6 +21,14 @@ class Account implements TimestampableInterface
 
     #[ORM\Column(length: 50)]
     private ?string $name = null;
+
+    #[ORM\Column]
+    #[Gedmo\Timestampable]
+    private ?\DateTime $createdAt = null;
+
+    #[ORM\Column]
+    #[Gedmo\Timestampable]
+    private ?\DateTime $updatedAt = null;
 
     /**
      * @var Collection<int, Organization>
@@ -63,6 +68,26 @@ class Account implements TimestampableInterface
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTime $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
     }
 
     /**

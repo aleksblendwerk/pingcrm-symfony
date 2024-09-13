@@ -21,10 +21,10 @@
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.2",
         "gumlet/php-image-resize": "^2.0",
-        "knplabs/doctrine-behaviors": "dev-sf7.0 as 2.6.3",
         "pentatrion/vite-bundle": "^7.0",
         "phpdocumentor/reflection-docblock": "^5.4",
-        "skipthedragon/inertia-bundle": "*",
+        "skipthedragon/inertia-bundle": "^1.1",
+        "stof/doctrine-extensions-bundle": "^1.12",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "7.1.*",
         "symfony/console": "7.1.*",
@@ -160,11 +160,5 @@
             "@build-test-database",
             "@phpunit"
         ]
-    },
-    "repositories": {
-        "jfsenechal_doctrine_behaviors": {
-            "type": "vcs",
-            "url": "git@github.com:jfsenechal/DoctrineBehaviors.git"
-        }
     }
 }
