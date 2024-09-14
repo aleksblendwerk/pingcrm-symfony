@@ -57,7 +57,6 @@
         "zenstruck/foundry": "^2.0.7"
     },
     "require-dev": {
-        "ergebnis/composer-normalize": "^2.8",
         "friendsofphp/php-cs-fixer": "^3.62",
         "php-parallel-lint/php-console-highlighter": "^0.5.0",
         "php-parallel-lint/php-parallel-lint": "^1.0",
@@ -101,19 +100,14 @@
     },
     "config": {
         "allow-plugins": {
-            "symfony/flex": true,
-            "ergebnis/composer-normalize": true,
             "phpstan/extension-installer": true,
+            "symfony/flex": true,
             "symfony/runtime": true
         },
         "optimize-autoloader": true,
         "sort-packages": true
     },
     "extra": {
-        "composer-normalize": {
-            "indent-size": 4,
-            "indent-style": "space"
-        },
         "symfony": {
             "allow-contrib": true,
             "require": "7.1.*"
@@ -143,7 +137,7 @@
         ],
         "lint": "vendor/bin/parallel-lint --colors --exclude var --exclude vendor .",
         "php-cs-fixer-check": "vendor/bin/php-cs-fixer check --ansi --diff --using-cache=no -vvv",
-        "php cs-fixer-fix": "vendor/bin/php-cs-fixer fix --ansi --diff --using-cache=no -vvv",
+        "php-cs-fixer-fix": "vendor/bin/php-cs-fixer fix --ansi --diff --using-cache=no -vvv",
         "phpstan": "vendor/bin/phpstan analyse --ansi",
         "phpunit": "vendor/bin/phpunit --colors=always",
         "qa": [
