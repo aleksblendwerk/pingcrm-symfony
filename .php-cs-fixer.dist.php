@@ -3,8 +3,9 @@
 $finder = (new PhpCsFixer\Finder())
     ->in(__DIR__)
     ->exclude([
-        'var',
-        'node_modules'
+        'docker',
+        'node_modules',
+        'var'
     ])
 ;
 

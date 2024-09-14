@@ -5,7 +5,7 @@ A demo application to illustrate how [Inertia.js](https://inertiajs.com/) works,
 
 ![Screenshot](screenshot.png)
 
-Requires and is tested with PHP 8.1.
+Requires and is tested with PHP 8.3.
 
 ## Installation
 
@@ -31,8 +31,14 @@ Build assets:
 npm run dev
 ```
 
-The current configuration uses MySQL. Adjust the `DATABASE_URL` in `.env` accordingly 
-(or optionally create a `.env.local` file and put your overrides there).
+Start the local docker environment:
+
+```sh
+docker compose up
+```
+
+The current configuration uses MariaDB. If you're not using the supplied Docker environment, create a `.env.local` file
+and adjust the `DATABASE_URL` accordingly.
 
 Create the database, schema and load the initial data:
 
@@ -40,13 +46,7 @@ Create the database, schema and load the initial data:
 composer build-database
 ```
 
-Run the dev server:
-
-```sh
-symfony serve
-```
-
-You're ready to go! Visit Ping CRM in your browser, and login with:
+You're ready to go! Visit Ping CRM in your browser at http://localhost:8000/ and login with:
 
 - **Username:** johndoe@example.com
 - **Password:** secret

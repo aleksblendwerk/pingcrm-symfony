@@ -1,5 +1,4 @@
-.DS_Store
-/.idea/
+/docker/data/
 /public/images/
 
 ###> symfony/framework-bundle ###
@@ -11,6 +10,7 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
 ###> symfony/phpunit-bridge ###
 .phpunit
 .phpunit.result.cache

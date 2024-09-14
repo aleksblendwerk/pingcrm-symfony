@@ -18,7 +18,7 @@ jobs:
         name: Build, QA and Tests on PHP ${{ matrix.php-versions }}
 
         services:
-            mysql:
+            database:
                 image: mariadb:11.5.2
                 env:
                     MARIADB_DATABASE: pingcrm
@@ -62,4 +62,5 @@ jobs:
 
             -   name: Tests
                 run: |
+                    sed -i "s#@database#@127.0.0.1#" .env.test
                     composer test --ansi

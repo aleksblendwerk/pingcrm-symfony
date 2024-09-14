@@ -1,0 +1,23 @@
+services:
+    php:
+        build: ./docker/php
+        ports:
+            - 8000:80
+        environment:
+            - APACHE_DOCUMENT_ROOT=/var/www/html/public
+        volumes:
+            - ./:/var/www/html
+        depends_on:
+            - database
+
+    database:
+        image: mariadb:11.5.2
+        ports:
+            - 3306:3306
+        environment:
+            - MARIADB_DATABASE=pingcrm
+            - MARIADB_USER=pingcrm
+            - MARIADB_PASSWORD=pingcrm
+            - MARIADB_ROOT_PASSWORD=pingcrm
+        volumes:
+            - ./docker/data/database:/var/lib/mysql
