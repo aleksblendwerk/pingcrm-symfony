@@ -65,7 +65,7 @@ composer test
 ## Credits
 
 - [Original Ping CRM](https://github.com/inertiajs/pingcrm) by Jonathan Reinink ([@reinink](https://github.com/reinink)) and contributors
-- [Inertia.js server-side adapter for Symfony](https://github.com/rompetomp/inertia-bundle) by Hannes Vermeire ([@rompetomp](https://github.com/rompetomp)), Tudorache Leonard-Valentin ([@SkipTheDragon](https://github.com/SkipTheDragon)) and contributors
+- [Inertia.js server-side adapter for Symfony](https://github.com/SkipTheDragon/inertia-bundle) by Hannes Vermeire ([@rompetomp](https://github.com/rompetomp)), Tudorache Leonard-Valentin ([@SkipTheDragon](https://github.com/SkipTheDragon)) and contributors
 - This port by Aleks Seltenreich ([@aleksblendwerk](https://github.com/aleksblendwerk))
 
 Shout-outs to [all Ping CRMs all over the world](https://inertiajs.com/demo-application#third-party)!
